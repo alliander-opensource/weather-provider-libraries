@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "weather-provider-libraries"
+version = "0.2.0"
+description = ""
+authors = ["Raoul Linnenbank <58594297+rflinnenbank@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
