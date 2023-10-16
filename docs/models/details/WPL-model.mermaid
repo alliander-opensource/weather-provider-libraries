@@ -1,0 +1,88 @@
+---
+title: WPL Model Class information
+config:
+  theme: base
+  themeVariables: {
+      primaryColor: "#bcc0d0",
+      primaryTextColor: "#000000",
+      primaryBorderColor: "#9096B2",
+      lineColor: "#646C93"
+  }
+
+---
+classDiagram
+    WPLBaseSource *-- WPLBaseModel
+    WPLBaseModel *-- WPLBaseStorageHandler
+    WPLController --|> WPLBaseSource
+    WPLBaseModel ..|> ExampleWPLModel~WPLBaseModel~
+
+    class ExampleWPLModel~WPLBaseModel~ {
+        +str code
+        +str name
+        +str description
+        +bool direct_access
+        +bool predictive
+        -metadata_properties
+
+
+
+        %% methods
+        +metadata() dict[str]
+        +get_model_data() Xarray.Dataset
+    }
+
+    class WPLController {
+        +list[WPLBaseSource] sources
+
+        %% methods
+        +get_source() WPLBaseSource
+        +get_model() WPLBaseModel
+        +get_model_data() Xarray.dataset
+    }
+
+
+namespace Base classes {
+    class WPLBaseModel {
+        +str code
+        +str name
+        +str description
+        +bool direct_access
+        +bool predictive
+        -metadata_properties
+
+
+
+        %% methods
+        +metadata() dict[str]
+        +get_model_data() Xarray.Dataset
+    }
+
+    class WPLBaseSource {
+        +code
+        +name
+        +models dict[WPLBaseModel]
+
+        %% methods
+        +metadata() dict[str]
+        +get_model() WPLBaseModel
+        +get_model_data() Xarray.Dataset
+    }
+
+    class WPLBaseStorageHandler {
+        +str model_code
+
+        -WPLStorageSettings storage_settings
+
+        %% methods
+        +get_storage_evaluation()
+        +get_model_data() Xarray.Dataset
+        +update_model_data()
+        +clear_model_data()
+
+        %%properties
+        +file_index()
+    }
+}
+
+
+

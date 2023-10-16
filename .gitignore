@@ -513,6 +513,7 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+_build/
 
 # PyBuilder
 .pybuilder/
@@ -602,3 +603,5 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# Extra's
+testing_source/
