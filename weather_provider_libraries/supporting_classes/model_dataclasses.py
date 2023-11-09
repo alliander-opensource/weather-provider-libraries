@@ -6,14 +6,12 @@
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
-
 """ This module holds all the dataclasses that make up the WPLBaseModel class """
 from ipaddress import IPv4Address, IPv6Address
 from typing import Optional
 
 import pyproj.aoi
-from pydantic import BaseModel, Field, HttpUrl, ConfigDict
-from pydantic.dataclasses import dataclass
+from pydantic import BaseModel, Field, HttpUrl
 from pyproj import CRS
 from pyproj.aoi import BBox
 
@@ -52,23 +50,23 @@ class WPLModelIdentity(BaseModel, frozen=True):
     license_information: str = Field(min_length=4, max_length=255)
 
     @property
-    def metadata(self) -> dict:
+    def metadata(self) -> dict[str, str]:
         """Metadata dictionary return method used to produce metadata"""
         return {
             "Code": self.code,
             "Name": self.name,
             "Description": self.description,
+            "Information URL": self.information_url,
             "Licensing information": self.license_information,
         }
 
 
-@dataclass(config=ConfigDict(arbitrary_types_allowed=True))
-class WPLModelEnvironment:
+class WPLModelEnvironment(BaseModel, frozen=True, arbitrary_types_allowed=True):
     """This data class holds the environmental data for a WPLBaseModel class instance required to identify model
      spatial boundaries and temporal limitations.
 
     Attributes:
-        source_crs (pyproj.CRS):    A CRS object indicating the source dataset or view's used coordinate system.
+        coordinate_system (pyproj.CRS): A CRS object indicating the source dataset or view's used coordinate system.
                                     If no coordinates system applies (as with singular data points may be the case)
                                      there is no need to set this.
                                     The default value is set at "EPSG:4326", which indicates WGS84 lat/lon coordinates.
@@ -90,7 +88,18 @@ class WPLModelEnvironment:
 
     boundary_box: Optional[BBox]
     temporal_reach: WPLTimePeriod
-    source_crs: CRS = CRS("EPSG:4326")
+    coordinate_system: CRS = CRS("EPSG:4326")
+
+    @property
+    def metadata(self) -> dict[str, str]:
+        """Metadata dictionary return method used to produce metadata"""
+        current_temporal_reach = self.temporal_reach.active_period
+        return {
+            "Boundary box": str(self.boundary_box),
+            "Coordinate system": self.coordinate_system.name,
+            "First date allowed": current_temporal_reach.first_moment_allowed.tostring,
+            "Last date allowed": current_temporal_reach.last_moment_allowed.tostring,
+        }
 
 
 class WPLModelConfiguration(BaseModel, validate_assignment=True):
@@ -129,7 +138,7 @@ class WPLModelConfiguration(BaseModel, validate_assignment=True):
     local_storage_mode: WPLStorageMode = WPLStorageMode.NO_STORAGE
 
     @property
-    def metadata(self) -> dict:
+    def metadata(self) -> dict[str, str]:
         """Metadata dictionary return method used to produce metadata"""
         return {
             "Can be accessed directly": self.direct_access,

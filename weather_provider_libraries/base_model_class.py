@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
 #  -------------------------------------------------------
 #  SPDX-FileCopyrightText: 2019-2023 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
@@ -14,11 +13,14 @@ WPL Model classes are the core level at which the WPL project handles datasets. 
  either be considered an interpretation of a dataset, or a view thereof.
 
 """
+import xarray as xr
+
 from weather_provider_libraries.supporting_classes.model_dataclasses import (
     WPLModelConfiguration,
     WPLModelIdentity,
     WPLModelEnvironment,
 )
+from weather_provider_libraries.utils.validation_utils import WPLTimePeriod
 
 
 class WPLBaseModel:
@@ -31,22 +33,42 @@ class WPLBaseModel:
 
     def __new__(
         cls,
-        model_data: WPLModelIdentity,
+        model_identity: WPLModelIdentity,
         model_environment: WPLModelEnvironment,
         model_configuration: WPLModelConfiguration,
     ):
         obj = object.__new__(cls)
 
         # Initialise the model's identity
-        obj.code = model_data.code
-        obj.name = model_data.name
-        obj.metadata = model_data.metadata
+        obj.identity = model_identity
 
         # Initialise the model's environment
         obj.environment = model_environment
 
         # Initialise model configuration
-        obj.model_configuration = model_configuration
-        obj.metadata.update(model_configuration.metadata)
+        obj.configuration = model_configuration
 
         return obj
+
+    @property
+    def code(self) -> str:
+        return self.identity.code
+
+    @property
+    def name(self) -> str:
+        return self.identity.name
+
+    @property
+    def metadata(self) -> dict[str, str]:
+        return {**self.identity.metadata, **self.environment.metadata, **self.configuration.metadata}
+
+    @property
+    def period_of_data_acquirable(self) -> WPLTimePeriod:
+        """Property to retrieve the period of time set within the model environment"""
+        return self.environment.temporal_reach.active_period
+
+    def get_meteo_data(self) -> xr.Dataset:
+        """"""
+        raise NotImplementedError(
+            f"Weather model [{self.name}] is missing a proper implementation of the [get_meteo_data()] method"
+        )

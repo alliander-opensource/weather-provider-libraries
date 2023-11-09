@@ -9,3 +9,4 @@
 """ This module contains constants used around the project. """
 
 DEFAULT_DATETIME_FORMAT = "datetime64[m]"
+DEFAULT_TIMEDELTA_FORMAT = "timedelta64[m]"

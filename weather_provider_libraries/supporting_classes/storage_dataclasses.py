@@ -11,7 +11,7 @@
 from enum import Enum
 
 
-class WPLStorageMode(str, Enum):
+class WPLStorageMode(str, Enum):  # pragma: no cover
     NO_STORAGE = "No data stored"
     CACHE_ONLY = "Only cache is stored"
     PERIODICAL_ONLY = "A period of data is stored"

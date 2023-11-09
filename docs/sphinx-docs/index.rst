@@ -20,10 +20,12 @@ Welcome to the Weather Provider Libraries (WPL) documentation!
 
    introduction
    quick-start
+   xarray_formatting
 
 .. toctree::
    :caption: Modular information
    :maxdepth: 3
    :hidden:
 
+   modules
    modindex
