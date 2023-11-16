@@ -20,6 +20,7 @@ from weather_provider_libraries.supporting_classes.model_dataclasses import (
     WPLModelIdentity,
     WPLModelEnvironment,
 )
+from weather_provider_libraries.supporting_classes.request_dataclasses import WPLMeteoRequest
 from weather_provider_libraries.utils.validation_utils import WPLTimePeriod
 
 
@@ -67,8 +68,13 @@ class WPLBaseModel:
         """Property to retrieve the period of time set within the model environment"""
         return self.environment.temporal_reach.active_period
 
-    def get_meteo_data(self) -> xr.Dataset:
+    def get_meteo_data(self, request: WPLMeteoRequest()) -> xr.Dataset:
         """"""
-        raise NotImplementedError(
-            f"Weather model [{self.name}] is missing a proper implementation of the [get_meteo_data()] method"
-        )
+
+        self.validate_request()
+
+        self._retrieve_raw_data()
+        return ...
+
+    def _retrieve_raw_data(self):
+        ...
