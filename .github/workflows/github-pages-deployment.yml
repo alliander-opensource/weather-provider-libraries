@@ -24,6 +24,6 @@ jobs:
         uses: actions/upload-pages-artifact@v2.0.0
         with:
           # Artifact name
-          name: gh-pages
+          name: github-pages
           # Path of the directory containing the static assets.
           path: _build
