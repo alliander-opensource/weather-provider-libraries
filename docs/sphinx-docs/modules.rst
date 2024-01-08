@@ -4,6 +4,6 @@ weather_provider_libraries
 ==========================
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 6
 
    weather_provider_libraries
