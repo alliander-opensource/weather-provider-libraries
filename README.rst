@@ -112,3 +112,5 @@ More information?
 -----------------
 
 for more information, please visit the GitHub Pages at:
+
+https://alliander-opensource.github.io/weather-provider-libraries/
