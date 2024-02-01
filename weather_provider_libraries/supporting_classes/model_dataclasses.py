@@ -2,15 +2,13 @@
 # -*- coding: utf-8 -*-
 
 #  -------------------------------------------------------
-#  SPDX-FileCopyrightText: 2019-2023 Alliander N.V.
+#  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
 """ This module holds all the dataclasses that make up the WPLBaseModel class """
 from ipaddress import IPv4Address, IPv6Address
-from typing import Optional
 
-import pyproj.aoi
 from pydantic import BaseModel, Field, HttpUrl
 from pyproj import CRS
 from pyproj.aoi import BBox
@@ -43,7 +41,7 @@ class WPLModelIdentity(BaseModel, frozen=True):
 
     """
 
-    code: str = Field(min_length=4, max_length=10)
+    code: str = Field(min_length=4, max_length=12)
     name: str = Field(min_length=8, max_length=32)
     description: str = Field(min_length=12, max_length=255)
     information_url: HttpUrl | IPv4Address | IPv6Address
@@ -86,7 +84,7 @@ class WPLModelEnvironment(BaseModel, frozen=True, arbitrary_types_allowed=True):
 
     """
 
-    boundary_box: Optional[BBox]
+    boundary_box: BBox | None = None
     temporal_reach: WPLTimePeriod
     coordinate_system: CRS = CRS("EPSG:4326")
 
@@ -97,8 +95,8 @@ class WPLModelEnvironment(BaseModel, frozen=True, arbitrary_types_allowed=True):
         return {
             "Boundary box": str(self.boundary_box),
             "Coordinate system": self.coordinate_system.name,
-            "First date allowed": current_temporal_reach.first_moment_allowed.tostring,
-            "Last date allowed": current_temporal_reach.last_moment_allowed.tostring,
+            "First date allowed": current_temporal_reach.first_moment_allowed.astype(str),
+            "Last date allowed": current_temporal_reach.last_moment_allowed.astype(str),
         }
 
 

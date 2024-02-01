@@ -13,6 +13,8 @@ WPL Model classes are the core level at which the WPL project handles datasets. 
  either be considered an interpretation of a dataset, or a view thereof.
 
 """
+from pathlib import Path
+
 import xarray as xr
 
 from weather_provider_libraries.supporting_classes.model_dataclasses import (
@@ -34,6 +36,7 @@ class WPLBaseModel:
 
     def __new__(
         cls,
+        model_settings: WPLModelSettings,  # TODO: Implement model settings frame for config_file
         model_identity: WPLModelIdentity,
         model_environment: WPLModelEnvironment,
         model_configuration: WPLModelConfiguration,
