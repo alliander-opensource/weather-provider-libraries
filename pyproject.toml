@@ -9,7 +9,7 @@ readme = "README.rst"
 python = ">=3.11, <3.13"
 numpy = "^1.26.0"
 loguru = "^0.7.2"
-xarray = "^2023.9.0"
+xarray = "^2024.1.1"
 validators = "^0.22.0"
 pyproj = "^3.6.1"
 pydantic = "^2.4.2"
@@ -32,20 +32,6 @@ line-length = 120
 
 [tool.pylint."FORMAT"]
 max-line-length = 120
-
-[tool.pytest.ini_options]
-testpaths = [
-    "tests"
-]
-
-[tool.coverage.run]
-branch = true
-
-[tool.coverage.paths]
-source = ["weather_provider_libraries"]
-
-[tool.coverage.html]
-directory = "docs/coverage_html_report"
 
 [tool.pytest.ini_options]
 testpaths = [

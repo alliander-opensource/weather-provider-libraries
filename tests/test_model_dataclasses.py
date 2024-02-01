@@ -15,14 +15,14 @@ from pydantic_core import Url
 from pyproj import CRS
 from pyproj.aoi import BBox
 
-from weather_provider_libraries.supporting_classes.model_dataclasses import (
+from weather_provider_libraries.__old__.supporting_classes import (
     WPLModelIdentity,
     WPLModelConfiguration,
     WPLModelEnvironment,
 )
-from weather_provider_libraries.supporting_classes.storage_dataclasses import WPLStorageMode
-from weather_provider_libraries.utils.constant_values import DEFAULT_DATETIME_FORMAT
-from weather_provider_libraries.utils.validation_utils import WPLTimePeriod
+from weather_provider_libraries.__old__.supporting_classes import WPLStorageMode
+from weather_provider_libraries.__old__.utils.constant_values import DEFAULT_DATETIME_FORMAT
+from weather_provider_libraries.__old__.utils.validation_utils import WPLTimePeriod
 
 
 @pytest.fixture(scope="module")

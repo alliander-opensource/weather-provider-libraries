@@ -12,8 +12,8 @@ import numpy as np
 import pytest
 from pydantic import ValidationError
 
-from weather_provider_libraries.utils.constant_values import DEFAULT_TIMEDELTA_FORMAT, DEFAULT_DATETIME_FORMAT
-from weather_provider_libraries.utils.validation_utils import WPLTimePeriod
+from weather_provider_libraries.__old__.utils.constant_values import DEFAULT_TIMEDELTA_FORMAT, DEFAULT_DATETIME_FORMAT
+from weather_provider_libraries.__old__.utils.validation_utils import WPLTimePeriod
 
 valid_test_periods = [
     (

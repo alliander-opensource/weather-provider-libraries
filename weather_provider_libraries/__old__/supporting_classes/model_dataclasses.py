@@ -13,8 +13,8 @@ from pydantic import BaseModel, Field, HttpUrl
 from pyproj import CRS
 from pyproj.aoi import BBox
 
-from weather_provider_libraries.supporting_classes.storage_dataclasses import WPLStorageMode
-from weather_provider_libraries.utils.validation_utils import WPLTimePeriod
+from weather_provider_libraries.__old__.supporting_classes.storage_dataclasses import WPLStorageMode
+from weather_provider_libraries.__old__.utils.validation_utils import WPLTimePeriod
 
 
 class WPLModelIdentity(BaseModel, frozen=True):

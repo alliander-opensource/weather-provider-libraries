@@ -17,8 +17,8 @@ from pydantic import ConfigDict
 from pydantic.dataclasses import dataclass
 from pyproj import CRS
 
-from weather_provider_libraries.utils.calculation_utils import does_coordinate_lie_within_crs
-from weather_provider_libraries.utils.constant_values import DEFAULT_DATETIME_FORMAT, DEFAULT_TIMEDELTA_FORMAT
+from weather_provider_libraries.__old__.utils.calculation_utils import does_coordinate_lie_within_crs
+from weather_provider_libraries.__old__.utils.constant_values import DEFAULT_DATETIME_FORMAT, DEFAULT_TIMEDELTA_FORMAT
 
 
 @dataclass(config=ConfigDict(arbitrary_types_allowed=True))

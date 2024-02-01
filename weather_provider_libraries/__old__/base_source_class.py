@@ -14,8 +14,8 @@ WPL Source classes are containers for WPL Models.
 
 import xarray as xr
 
-from weather_provider_libraries.base_model_class import WPLBaseModel
-from weather_provider_libraries.supporting_classes.source_dataclasses import WPLSourceIdentity
+from weather_provider_libraries.__old__.base_model_class import WPLBaseModel
+from weather_provider_libraries.__old__.supporting_classes import WPLSourceIdentity
 
 
 class WPLBaseSource:

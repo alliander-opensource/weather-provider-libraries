@@ -9,9 +9,9 @@
 """ This ... """
 from loguru import logger
 
-from weather_provider_libraries.supporting_classes.storage_dataclasses import WPLStorageIdentity, WPLStorageMode
-from weather_provider_libraries.utils.calculation_utils import generate_size_string_from_value
-from weather_provider_libraries.utils.validation_utils import WPLTimePeriod
+from weather_provider_libraries.__old__.supporting_classes import WPLStorageIdentity, WPLStorageMode
+from weather_provider_libraries.__old__.utils.calculation_utils import generate_size_string_from_value
+from weather_provider_libraries.__old__.utils.validation_utils import WPLTimePeriod
 
 
 class WPLBaseStorage:

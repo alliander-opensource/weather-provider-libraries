@@ -9,7 +9,7 @@
 """ This """
 from pydantic import BaseModel
 
-from weather_provider_libraries.utils.validation_utils import WPLTimePeriod, WPLCoordinateList
+from weather_provider_libraries.__old__.utils.validation_utils import WPLTimePeriod, WPLCoordinateList
 
 
 class WPLMeteoRequest(BaseModel):
