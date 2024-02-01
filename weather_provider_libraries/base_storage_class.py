@@ -7,29 +7,45 @@
 #  -------------------------------------------------------
 
 """ This ... """
+from loguru import logger
 
 from weather_provider_libraries.supporting_classes.storage_dataclasses import WPLStorageIdentity, WPLStorageMode
 from weather_provider_libraries.utils.calculation_utils import generate_size_string_from_value
 from weather_provider_libraries.utils.validation_utils import WPLTimePeriod
 
 
-class WPLStorage:
-    """"""
+class WPLBaseStorage:
+    """The Base WPL Storage class
+
+    This class provides a standardized method of storing and requesting stored data for WPL models. Any model set
+     with a proper WPLStorageMode should have their WPLBaseStorage class automatically hooked up for accessing any
+     stored data.
+
+    If used with cache mode, new requests should also automatically be stored in the cache, pushing out older data if
+     needed.
+
+    If used with periodical mode, a pod / process with the WPLChronicler should be booted. The WPLChronicler should
+     automatically detect the proper settings from the model's configuration file.
+
+    """
 
     def __new__(
         cls, storage_identity: WPLStorageIdentity, cache_size_mb: int = None, period_stored: WPLTimePeriod = None
     ):
         obj = object.__new__(cls)
         obj.identity = storage_identity
+        obj.cache_size_mb = None
+        obj.period_stored = None
 
         if storage_identity.storage_mode == WPLStorageMode.NO_STORAGE:
+            # There is no reason to set a WPLStorage class if no storage is used.
             raise ValueError(
                 "The WPLStorageMode was set to [NO_STORAGE]. No WPLStorage class should be used if no data needs to be "
                 "stored! Please alter either the WPLStorageMode or remove the WPLStorage initialisation."
             )
 
         if storage_identity.storage_mode in (WPLStorageMode.CACHE_ONLY, WPLStorageMode.CACHE_AND_PERIODICAL):
-            # Cache applies
+            # If a storage cache applies, a size should be set as well
             if not cache_size_mb:
                 raise ValueError(
                     f"The WPLStorageMode was set to [{storage_identity.storage_mode}] but no [cache_size_mb] was given"
@@ -37,7 +53,7 @@ class WPLStorage:
             obj.cache_size_mb = cache_size_mb
 
         if storage_identity.storage_mode in (WPLStorageMode.PERIODICAL_ONLY, WPLStorageMode.CACHE_AND_PERIODICAL):
-            # Periodical storage applies
+            # If a storage period applies, the period should be set as well
             if not period_stored or not isinstance(period_stored, WPLTimePeriod):
                 raise ValueError(
                     f"The WPLStorageMode was set to [{storage_identity.storage_mode}] but no proper [period_stored] "
@@ -45,6 +61,7 @@ class WPLStorage:
                 )
             obj.period_stored = period_stored
 
+        logger.info(f"The WPLStorage class for [{obj.identity.name}] has been successfully initialized.")
         return obj
 
     @property

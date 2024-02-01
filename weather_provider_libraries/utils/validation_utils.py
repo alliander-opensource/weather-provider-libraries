@@ -3,7 +3,7 @@
 
 
 #  -------------------------------------------------------
-#  SPDX-FileCopyrightText: 2019-2023 Alliander N.V.
+#  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
@@ -15,7 +15,9 @@ from typing import Self
 import numpy as np
 from pydantic import ConfigDict
 from pydantic.dataclasses import dataclass
+from pyproj import CRS
 
+from weather_provider_libraries.utils.calculation_utils import does_coordinate_lie_within_crs
 from weather_provider_libraries.utils.constant_values import DEFAULT_DATETIME_FORMAT, DEFAULT_TIMEDELTA_FORMAT
 
 
@@ -94,3 +96,33 @@ class WPLTimePeriod:
             last_moment = np.datetime64("now") + last_moment
 
         return WPLTimePeriod(first_moment, last_moment, self.unconstrained)
+
+
+@dataclass(config=ConfigDict(arbitrary_types_allowed=True))
+class WPLCoordinateList:
+    """..."""
+
+    coordinates: list[tuple[float, float]]
+    crs: CRS = CRS.from_epsg(4326)
+
+    @property
+    def valid_coordinates(self) -> list[tuple[float, float]]:
+        """Retrieves only the coordinates that are valid within the CRS"""
+        list_of_valid_coordinates: list[tuple[float, float]] = []
+
+        for coordinate in self.coordinates:
+            if does_coordinate_lie_within_crs(crs=self.crs, coordinate=coordinate):
+                list_of_valid_coordinates.append(coordinate)
+
+        return list_of_valid_coordinates
+
+    @property
+    def invalid_coordinates(self) -> list[tuple[float, float]]:
+        """Retrieves only the coordinates that are not valid within the CRS"""
+        list_of_invalid_coordinates: list[tuple[float, float]] = []
+
+        for coordinate in self.coordinates:
+            if not does_coordinate_lie_within_crs(crs=self.crs, coordinate=coordinate):
+                list_of_invalid_coordinates.append(coordinate)
+
+        return list_of_invalid_coordinates

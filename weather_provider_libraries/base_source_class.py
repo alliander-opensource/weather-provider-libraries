@@ -19,7 +19,15 @@ from weather_provider_libraries.supporting_classes.source_dataclasses import WPL
 
 
 class WPLBaseSource:
-    """ """
+    """The WPL Base Source class
+
+    This class provides access to one or more WPL Model classes. Its purpose is to group multiple weather models based
+     on their source (or nature) and to allow for the re-use of model id's.
+     (For instance, if two sources carry a "daily weather" model with similar / identical data, you could label both
+     using the "daily" id. This prevents builders from having to initialize a "source_1_daily" and "source_2_daily",
+     reducing effort in both creation and the calling of the model.)
+
+    """
 
     def __init__(self, source_identity: WPLSourceIdentity):
         # Initialise the source's identity

@@ -20,11 +20,11 @@ class WPLStorageMode(str, Enum):  # pragma: no cover
     CACHE_AND_PERIODICAL = "Both cache and a period of data are stored"
 
 
-class WPLStorageIdentity(BaseModel, frozen=True, arbitrary_types_allowed=True):
+class WPLStorageIdentity(BaseModel, frozen=True, arbitrary_types_allowed=True, use_enum_values=True):
     code: str = Field(min_length=4, max_length=10)
     name: str = Field(min_length=8, max_length=32)
     description: str = Field(min_length=12, max_length=255)
-    storage_mode: WPLStorageMode = Field(WPLStorageMode)
+    storage_mode: WPLStorageMode
 
     @property
     def metadata(self) -> dict[str, str]:

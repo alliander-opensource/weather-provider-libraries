@@ -32,3 +32,31 @@ line-length = 120
 
 [tool.pylint."FORMAT"]
 max-line-length = 120
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests"
+]
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.paths]
+source = ["weather_provider_libraries"]
+
+[tool.coverage.html]
+directory = "docs/coverage_html_report"
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests"
+]
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.paths]
+source = ["weather_provider_libraries"]
+
+[tool.coverage.html]
+directory = "docs/coverage_html_report"
