@@ -1,0 +1,16 @@
+{
+  "167": {
+    "name": "2 metre temperature",
+    "shortName": "2t",
+    "description": "This parameter is the temperature of air at 2m above the surface of land, sea or in-land waters.",
+    "unit": "K",
+    "harmonisationName": "temperature"
+  },
+  "10": {
+    "name": "wind speed",
+    "shortName": "ws",
+    "description": "The speed of horizontal air movement in metres per second.",
+    "unit": "meter / second",
+    "harmonisationName": "wind_speed"
+  }
+}
