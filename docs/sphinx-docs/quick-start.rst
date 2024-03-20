@@ -1,12 +1,12 @@
 .. coding=utf-8
 
-===================================================
+***************************************************
 Getting Started with the Weather Provider Libraries
-===================================================
+***************************************************
 
---------------------
+====================
 Package installation
---------------------
+====================
 To install the Weather Provider Libraries package you only need to install it using PyPi::
 
 >  pip install weather-provider-libraries
@@ -14,18 +14,18 @@ To install the Weather Provider Libraries package you only need to install it us
 *Please note that when building your own model(s) and source(s) you will need to use the base classes declared
 within the package to allow them to be recognized and used by the API.*
 
---------------------------
+==========================
 Default Sources and Models
---------------------------
+==========================
 The Weather Provider Libraries (WPL) package will automatically install a number of sources and models natively
 supported by the project. For a information on these sources, their models and their specific usage, please read the
 documentation available at:
 
     `https://github.com/alliander-opensource/ <https://github.com/alliander-opensource/>`_
 
--------------------------------------------
+===========================================
 Your first request using the WPL Controller
--------------------------------------------
+===========================================
 When using WPL directly, rather than through the API, you'll be able to contact all configured and set models by using
 the Controller. The controller can be either instantiated by using Python or called upon via one of the available
 scripts.

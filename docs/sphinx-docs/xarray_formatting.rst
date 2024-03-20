@@ -2,13 +2,13 @@
 .. SPDX-FileCopyrightText: 2019-2022 Alliander N.V.
 .. SPDX-License-Identifier: MPL-2.0
 
-=======================================
+***************************************
 Xarray formatting your data for a model
-=======================================
+***************************************
 
-------------
+============
 Introduction
-------------
+============
 The hardest thing to do when creating your own data for a model, will likely be the formatting into a proper Xarray
 Dataset format. The reason for this is that a single meteorological dataset can often have multiple indexes, allowing
 for one weather factor to be dependant on a lat/lon location and time alone, whereas another may also be dependant on
@@ -22,9 +22,9 @@ Having said that, we still have to lay the groundwork for proper storage of thes
 This document wil show you how to load the most common meteorological dataset formats into a xarray dataset and how to
 properly create the needed index settings to allow the WPL project to automatically handle harmonisation and formatting.
 
-------------------------------------
+====================================
 Loading your source data into Xarray
-------------------------------------
+====================================
 So you have downloaded meteorological from a dataset and wish to load it into Xarray for further handling by WPL.
 What now?
 
@@ -59,9 +59,9 @@ In this stage, there usually shouldn't be many problems, but the following probl
   separating the data and adjusting it for use in a single dataset, or flattening the data outright and fixing it from
   there.
 
-----------
+==========
 Indexation
-----------
+==========
 With your data now well and loaded into a Xarray Dataset, we're not quite there yet. To allow for easy use in the WPL
 project, we 'll need to address indexation.
 

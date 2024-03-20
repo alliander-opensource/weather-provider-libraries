@@ -2,17 +2,17 @@
 .. SPDX-FileCopyrightText: 2019-2023 Alliander N.V.
 .. SPDX-License-Identifier: MPL-2.0
 
-=================================================
+*************************************************
 An introduction to the Weather Provider Libraries
-=================================================
+*************************************************
 
----------------------------------------------
+=============================================
 What is the Weather Provider Libraries (WPL)?
----------------------------------------------
+=============================================
 
-^^^^^^^^^^^^
-Project Goal
-^^^^^^^^^^^^
+----------------
+**Project Goal**
+----------------
 The Weather Provider Libraries project is a project with a singular goal in mind::
 
     Easily accessing any data for a multitude of meteorological datasets and meteorological site-pages
@@ -39,9 +39,10 @@ following:
     that is what you need, while also retaining the possibility to upscale to a multitude of sources and models and
     even connect those to the `Weather Provider API`_ project for a fully functional API based on your wishes.
 
----------------
+===============
 Project Origins
----------------
+===============
+
 The Weather Provider Libraries Project, or WPL, as it will be abbreviated a lot in the documentation of this project,
 is a project based on the original "**weather_provider_api**" project found at:
 
@@ -50,14 +51,18 @@ is a project based on the original "**weather_provider_api**" project found at:
 Until version 3.0 of this project, every component thereof was considered a part of a singular whole, but to allow for
 easier usage and the easier building of new models and sources, the project was split up into three components:
 
+---------------------------------
 **1. Weather Provider Libraries**
+---------------------------------
 
    This project and the part that holds all of the common components and tools responsible for formatting, processing
    and transforming meteorological data, as well as all of the base classes for creating Models and Sources for the
    project. Finally the project also houses the Controller which allows for easy configuration and acquisition of data
    over multiple sources and models.
 
+---------------------------
 **2. Weather Provider API**
+---------------------------
 
    This project houses the API implementation of this project. It uses the Weather Provider Libraries project to
    transform any connected source and model into appropriate endpoints. This fully functional FastAPI implementation is
@@ -66,7 +71,9 @@ easier usage and the easier building of new models and sources, the project was 
    package or deployment using the readily available Docker images.
    For more information on this project please check the Project's repository page at: `Weather Provider API`_
 
+-------------------------------
 **3. Weather Provider Sources**
+-------------------------------
 
    This project actually consists of multiple repositories. Each repository houses one or multiple Sources that can be
    installed as packages used separately or from a Weather Provider Libraries system. Each Source can house one or

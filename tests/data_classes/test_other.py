@@ -1,16 +1,14 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 #  -------------------------------------------------------
 #  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import numpy as np
 import pytest
-
 from weather_provider_libraries.data_classes.other import TimePeriod
 from weather_provider_libraries.defaults.constants import DEFAULT_DATETIME_FORMAT
 
@@ -65,10 +63,10 @@ from weather_provider_libraries.defaults.constants import DEFAULT_DATETIME_FORMA
         ),
         # datetime start and end, boundary values set as datetime
         (
-            datetime(2022, 1, 1, 0, 0, tzinfo=timezone.utc),
-            datetime(2022, 2, 2, 23, 59, tzinfo=timezone.utc),
-            datetime(2020, 1, 1, 0, 0, tzinfo=timezone.utc),
-            datetime(2024, 2, 2, 23, 59, tzinfo=timezone.utc),
+            datetime(2022, 1, 1, 0, 0, tzinfo=UTC),
+            datetime(2022, 2, 2, 23, 59, tzinfo=UTC),
+            datetime(2020, 1, 1, 0, 0, tzinfo=UTC),
+            datetime(2024, 2, 2, 23, 59, tzinfo=UTC),
             np.datetime64("2022-01-01T00:00"),
             np.datetime64("2022-02-02T23:59"),
             np.datetime64("2020-01-01T00:00"),
@@ -91,7 +89,7 @@ def test_time_period_valid_input(
     All the parametrized values should resolve to valid TimePeriods without errors and generate periods with the
      supplied expectation values.
 
-    TODO:
+    Todo:
         - Fix the large number of input values for this test. (Use dictionaries for passed and expected values,
            leaving only two out of eight parameters for the purposes of linting.)
     """

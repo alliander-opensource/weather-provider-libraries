@@ -10,11 +10,12 @@ python = ">=3.11, <3.13"
 numpy = "^1.26.4"
 loguru = "^0.7.2"
 xarray = "^2024.1.1"
-validators = "^0.23.1"
+validators = "^0.23.2"
 pyproj = "^3.6.1"
 pydantic = "^2.6.2"
 jsonschema = "^4.21.1"
 toml = "^0.10.2"
+sphinx-rtd-theme = "^2.0.0"
 
 [tool.poetry.group.dev]
 optional = true
@@ -22,7 +23,6 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
 sphinx = "^7.2.6"
-sphinx-rtd-theme = "^2.0.0"
 coverage = "^7.3.3"
 ruff = "^0.3.3"
 black = "^24.2.0"

@@ -1414,13 +1414,13 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "validators"
-version = "0.23.1"
+version = "0.23.2"
 description = "Python Data Validation for Humans™"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "validators-0.23.1-py3-none-any.whl", hash = "sha256:e812ad5c0a80e44ed81bf01e42da2435705988131b83add5c9204f781cb9a4fa"},
-    {file = "validators-0.23.1.tar.gz", hash = "sha256:106d8ca7e4516d0c77e1b7c112723834dbf39e4abdbfca2574ff7cf183db1786"},
+    {file = "validators-0.23.2-py3-none-any.whl", hash = "sha256:cb68e489f946f4934dbd3c203f08486c53493ab1c204f39d13b13c209f60e2c1"},
+    {file = "validators-0.23.2.tar.gz", hash = "sha256:397ec4a1e86192e6e904b5afe8c12da0e6eaa3db088c0cc426e00cfee2ef07a8"},
 ]
 
 [[package]]
@@ -1464,4 +1464,4 @@ viz = ["matplotlib", "nc-time-axis", "seaborn"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11, <3.13"
-content-hash = "a05a76308dab0342419cd5faa25fccfa9150c9f107e4bbb48f6735a42fa311c2"
+content-hash = "d0ed3e61cea57ea93a151c550293a1c7258245e8c7c21b0871d4f82d015d9c59"

@@ -676,3 +676,6 @@ fabric.properties
 
 # Extra's
 testing_source/
+
+# All of IDEA really
+.idea/

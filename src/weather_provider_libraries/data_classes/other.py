@@ -5,7 +5,7 @@
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import Enum
 
 import numpy as np
@@ -56,7 +56,16 @@ class TimePeriod(BaseModel):
         cls, value_to_validate: np.datetime64 | np.timedelta64 | datetime
     ) -> np.datetime64 | np.timedelta64:
         if isinstance(value_to_validate, datetime):
+            if not (
+                value_to_validate.tzinfo is None
+                or value_to_validate.utcoffset() is None
+                or value_to_validate.utcoffset().total_seconds() == 0
+            ):
+                # Conversion to UTC and then to naive datetime:
+                value_to_validate = value_to_validate.astimezone(UTC)
+
             # Convert datetime directly to np.datetime64:
+            value_to_validate = value_to_validate.replace(tzinfo=None)
             return_value = np.datetime64(value_to_validate).astype(DEFAULT_DATETIME_FORMAT)
         else:
             return_value = (
