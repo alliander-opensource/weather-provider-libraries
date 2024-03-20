@@ -3,7 +3,7 @@
 .. SPDX-License-Identifier: MPL-2.0
 
 .. image:: https://img.shields.io/badge/License-MPL2.0-informational.svg
-   :target: https://github.com/alliander-opensource/weather-provider-libraries/
+   :target: https://github.com/alliander-opensource/weather-provider-libraries/LICENSE.md
    :alt: License: MIT
 .. image:: https://sonarcloud.io/api/project_badges/measure?project=alliander-opensource_weather-provider-libraries&metric=alert_status
    :target: https://sonarcloud.io/summary/new_code?id=alliander-opensource_weather-provider-libraries
@@ -24,18 +24,16 @@
    :target: https://sonarcloud.io/summary/new_code?id=alliander-opensource_weather-provider-libraries
    :alt: Coverage
 
-################################
-Weather Provider Library and API
-################################
-
-====================================
---- CURRENTLY UNDER CONSTRUCTION ---
-====================================
-
+#############################
+Weather Provider Access Suite
+#############################
 
 =================================================
 An introduction to the Weather Provider Libraries
 =================================================
+.. image:: /docs/images/wpas_logo.svg
+    :alt: Weather Provider Access Suite
+    :align: center
 
 ---------------------------------------------
 What is the Weather Provider Libraries (WPL)?

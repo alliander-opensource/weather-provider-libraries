@@ -1,13 +1,11 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 #  -------------------------------------------------------
 #  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
-from dummy_source.models.dummy_model import DummyModel
-
+from dummy_source.models.dummy.dummy_model import DummyModel
 from weather_provider_libraries.data_classes.source_related import SourceIdentity
 from weather_provider_libraries.wpl_meteo_source import WPLMeteoSource
 

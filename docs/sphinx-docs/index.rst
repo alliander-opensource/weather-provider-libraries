@@ -7,6 +7,11 @@
 Welcome to the Weather Provider Libraries (WPL) documentation!
 ==============================================================
 
+.. image:: /_static/wpas_logo.svg
+    :alt: Weather Provider Access Suite
+    :align: center
+    :width: 480px
+
 .. include:: introduction.rst
 
 .. toctree::
