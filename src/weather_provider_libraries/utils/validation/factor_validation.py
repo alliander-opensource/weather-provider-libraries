@@ -18,7 +18,7 @@ def validate_eccodes_factors_list_by_id_code(potential_factors: list[int]) -> bo
                 The list of eccodes factors that are to be validated.
 
     Returns:
-        (bool):
+        bool:
                 The result of the validation. If all the requested factors are valid, the method will return True.
                 If any of the requested factors are invalid, however, the method will return False.
 
@@ -46,7 +46,7 @@ def split_valid_and_invalid_eccodes_factors_list_by_id_code(
                 If supplied, only factors that are present in this list can be considered valid.
 
     Returns:
-        (tuple[list[int], list[int]]):
+        tuple[list[int], list[int]]:
                 A tuple containing two lists. The first list contains all the valid eccodes factors, and the
                 second list contains all the invalid eccodes factors.
 

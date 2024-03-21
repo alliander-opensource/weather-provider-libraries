@@ -19,13 +19,14 @@ def parse_bytesize_to_easily_readable(byte_value: int | float, current_unit: str
                 The number of bytes to convert. Please note that the unit will affect the actual number.
         current_unit (str):
                 The unit of the number of bytes to convert. Consists of a two-letter combination indicating the byte
-                 size (i.e. "MB" or "GB").
+                size (i.e. "MB" or "GB").
         decimals (int):
                 The number of decimals to use for the output string. Eventual values will be rounded to this number of
-                 decimals.
+                decimals.
 
     Returns:
-        (str):  A readable string representing the byte size originally passed.
+        str:
+                A readable string representing the byte size originally passed.
 
     """
     size_names = ["B", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]  # Above TB isn't expected, but you never know...

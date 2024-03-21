@@ -87,11 +87,11 @@ def test_time_period_valid_input(
     """This test evaluates variations of valid TimePeriod parameters.
 
     All the parametrized values should resolve to valid TimePeriods without errors and generate periods with the
-     supplied expectation values.
+    supplied expectation values.
 
-    Todo:
-        - Fix the large number of input values for this test. (Use dictionaries for passed and expected values,
-           leaving only two out of eight parameters for the purposes of linting.)
+    Notes:
+        Ideally we'd like to reduce the number of input values for this test. Eight is a bit much, and we're using
+        TimePeriod objects anyway.
     """
     # Generation
     if first_allowed_start is None:  # Full version used

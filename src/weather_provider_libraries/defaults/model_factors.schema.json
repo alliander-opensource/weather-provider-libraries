@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "A representation of WPl Model factor definitions with units, names and linked eccode ids",
+  "type": "object",
+  "patternProperties": {
+    "^[a-zA-Z0-9_ ]+$": {
+      "type": "object",
+      "properties": {
+        "linkedECCODESFactor": {
+          "type": "integer",
+          "description": "The ECCODES ID number of the matching factor"
+        },
+        "unit": {
+          "type": "string",
+          "description": "The Pint unit specification for the factor"
+        }
+      },
+      "required": ["linkedECCODESFactor", "unit"],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

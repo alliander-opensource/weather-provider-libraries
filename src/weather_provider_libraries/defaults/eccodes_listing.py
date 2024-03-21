@@ -15,7 +15,7 @@ from weather_provider_libraries.utils.validation.json_validation import validate
 
 _json_file = "meteo_factors.json"
 _json_file = MAIN_CONFIG_FOLDER.joinpath(_json_file)
-_json_schema_file = "defaults/meteo_factors.schema.json"
+_json_schema_file = "defaults/eccodes_factors.schema.json"
 _json_schema_file = MAIN_PROJECT_FOLDER.joinpath(_json_schema_file)
 
 with open(_json_file) as eccodes_factors_json_data:

@@ -5,18 +5,16 @@
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
-import os
 from pathlib import Path
 
 from loguru import logger
 
-_FOLDER_WITH_THIS_MODULE = Path(os.path.dirname(os.path.realpath(__file__)))
-_NEEDED_CONFIG_FILES = ["", ""]
+_NEEDED_CONFIG_FILES = ["meteo_factors.json"]
 
 
 def get_main_project_folder() -> Path:
     """Identify and return the main project folder for the Weather Provider Libraries."""
-    presumed_main_project_folder = _FOLDER_WITH_THIS_MODULE.parent.parent
+    presumed_main_project_folder = Path(__file__).parent.parent.parent
     print(f"{presumed_main_project_folder=}")
 
     if not presumed_main_project_folder.exists() or not presumed_main_project_folder.is_dir():
@@ -48,7 +46,13 @@ def get_main_config_folder() -> Path:
     ]
     for location in list_of_possible_config_folder_locations:
         if location.exists() and location.is_dir():
-            logger.debug(f"Configuration Folder found at: {location}")
+            logger.debug(f"Possible configuration Folder found at: {location}")
+
+            for filename in _NEEDED_CONFIG_FILES:
+                file = location.joinpath(filename)
+                if not file.exists() or not file.is_file():
+                    logger.debug(f"Configuration Folder at {location} is missing the file: {filename}")
+            logger.info(f"WP Libraries - Configuration Folder found at: {location}")
             return location
 
     logger.error("No valid configuration folder found for the Weather Provider Libraries.")

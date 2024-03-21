@@ -27,7 +27,7 @@ class WPLMeteoStorage:
 
     def get_meteo_data(
         self, requested_locations: list[...], requested_timeframe: TimePeriod, requested_eccodes_factors: list[int]
-    ) -> xr.Dataset:
+    ) -> tuple[xr.Dataset, dict[str, str]]:
         """Retrieve meteo data from the storage location.
 
         Args:
@@ -67,12 +67,15 @@ class WPLMeteoStorage:
         return requested_data, inaccessible_data_metadata
 
     def evaluate_requested_eccodes_factors(self, eccodes_factors: list[int]) -> tuple[list[int], list[int]]:
+        """Evaluate the requested eccodes factors and return the valid and invalid factors."""
         valid_eccodes_factors = [factor in eccodes_factors for factor in self.storage.eccodes_factors]
         invalid_eccodes_factors = [factor for factor in eccodes_factors if factor not in self.storage.eccodes_factors]
         return valid_eccodes_factors, invalid_eccodes_factors
 
     def evaluate_requested_location(self, requested_locations: list[...]) -> tuple[list[...], list[...]]:
+        """Evaluate the requested locations and return the valid and invalid locations."""
         raise NotImplementedError("This method is not implemented yet")
 
     def evaluate_requested_timeframe(self, requested_timeframe: TimePeriod) -> tuple[TimePeriod, TimePeriod]:
+        """Evaluate the requested timeframe and return the valid and invalid parts of the timeframe."""
         raise NotImplementedError("This method is not implemented yet")

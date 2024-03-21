@@ -34,6 +34,7 @@ An introduction to the Weather Provider Libraries
 .. image:: /docs/images/wpas_logo.svg
     :alt: Weather Provider Access Suite
     :align: center
+    :width: 50%
 
 ---------------------------------------------
 What is the Weather Provider Libraries (WPL)?
