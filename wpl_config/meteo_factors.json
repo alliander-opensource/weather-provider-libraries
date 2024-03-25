@@ -3,14 +3,24 @@
     "name": "2 metre temperature",
     "shortName": "2t",
     "description": "This parameter is the temperature of air at 2m above the surface of land, sea or in-land waters.",
-    "unit": "K",
-    "harmonisationName": "temperature"
+    "originalUnit": "K",
+    "SIUnit": "K",
+    "humanUnit": "°C",
+    "metricUnit": "°C",
+    "americanUnit": "°F",
+    "imperialUnit": "°F",
+    "oldHarmonisationName": "temperature"
   },
   "10": {
     "name": "wind speed",
     "shortName": "ws",
     "description": "The speed of horizontal air movement in metres per second.",
-    "unit": "meter / second",
-    "harmonisationName": "wind_speed"
+    "originalUnit": "m/s",
+    "SIUnit": "m/s",
+    "humanUnit": "m/s",
+    "metricUnit": "m/s",
+    "americanUnit": "mph",
+    "imperialUnit": "mph",
+    "oldHarmonisationName": "wind_speed"
   }
 }

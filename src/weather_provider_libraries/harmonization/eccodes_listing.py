@@ -5,11 +5,7 @@
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
-from pathlib import Path
 
-from weather_provider_libraries import WPLMeteoModel
-
-
-class DummyModel(WPLMeteoModel):
-    def __init__(self):
-        super().__init__(init_folder=Path(__file__).parent.resolve())
+def _load_known_eccodes_configuration_from_file() -> dict[int, EccodesFactor]:
+    """Load the known eccodes configuration from a file."""
+    raise NotImplementedError

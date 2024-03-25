@@ -6,7 +6,7 @@
 #  -------------------------------------------------------
 
 import pytest
-from weather_provider_libraries.utils.validation.factor_validation import (
+from weather_provider_libraries import (
     split_valid_and_invalid_eccodes_factors_list_by_id_code,
     validate_eccodes_factors_list_by_id_code,
 )

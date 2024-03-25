@@ -16,6 +16,8 @@ pydantic = "^2.6.2"
 jsonschema = "^4.21.1"
 toml = "^0.10.2"
 sphinx-rtd-theme = "^2.0.0"
+pint = "^0.23"
+pint-xarray = "^0.3"
 
 [tool.poetry.group.dev]
 optional = true
@@ -25,8 +27,8 @@ pytest = "^8.1.1"
 sphinx = "^7.2.6"
 coverage = "^7.3.3"
 ruff = "^0.3.3"
-black = "^24.2.0"
 myst-parser = "^2.0.0"
+black = "^24.3.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -51,7 +53,6 @@ directory = "docs/coverage_html_report"
 
 [tool.black]
 line-length = 120
-indent-width = 4
 target-version = ["py311", "py312"]
 
 [tool.ruff]

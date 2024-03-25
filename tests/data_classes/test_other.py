@@ -9,8 +9,7 @@ from datetime import UTC, datetime
 
 import numpy as np
 import pytest
-from weather_provider_libraries.data_classes.other import TimePeriod
-from weather_provider_libraries.defaults.constants import DEFAULT_DATETIME_FORMAT
+from weather_provider_libraries import DEFAULT_DATETIME_FORMAT, TimePeriod
 
 
 @pytest.mark.parametrize(

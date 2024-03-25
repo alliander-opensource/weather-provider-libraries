@@ -5,11 +5,14 @@
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
-from pathlib import Path
+from pydantic import BaseModel
 
-from weather_provider_libraries import WPLMeteoModel
+"""This module contains the factor related classes for the weather provider libraries."""
 
 
-class DummyModel(WPLMeteoModel):
-    def __init__(self):
-        super().__init__(init_folder=Path(__file__).parent.resolve())
+class ModelFactor(BaseModel):
+    """"""
+
+    id: str
+    eccodes_id: int | None
+    units: str

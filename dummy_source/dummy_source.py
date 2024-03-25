@@ -5,9 +5,9 @@
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
+from weather_provider_libraries import SourceIdentity, WPLMeteoSource
+
 from dummy_source.models.dummy.dummy_model import DummyModel
-from weather_provider_libraries.data_classes.source_related import SourceIdentity
-from weather_provider_libraries.wpl_meteo_source import WPLMeteoSource
 
 
 class DummySource(WPLMeteoSource):

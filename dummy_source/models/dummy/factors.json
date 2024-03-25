@@ -1,10 +1,10 @@
 {
   "temperature": {
-    "linkedECCODESFactor": 167,
-    "unit": "C"
+    "eccodesID": 167,
+    "units": "C"
   },
   "wind speed": {
-    "linkedECCODESFactor": 10,
-    "unit": "m/s"
+    "eccodesID": 10,
+    "units": "m/s"
   }
 }

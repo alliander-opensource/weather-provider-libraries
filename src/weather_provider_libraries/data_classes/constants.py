@@ -5,11 +5,7 @@
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
-from pathlib import Path
+"""A module for storing constants that are used throughout the library."""
 
-from weather_provider_libraries import WPLMeteoModel
-
-
-class DummyModel(WPLMeteoModel):
-    def __init__(self):
-        super().__init__(init_folder=Path(__file__).parent.resolve())
+DEFAULT_DATETIME_FORMAT = "datetime64[m]"
+DEFAULT_TIMEDELTA_FORMAT = "timedelta64[m]"
