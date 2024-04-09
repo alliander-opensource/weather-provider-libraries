@@ -9,18 +9,34 @@
 
 import xarray as xr
 
+from weather_provider_libraries.data_classes.factors import ModelFactor
+from weather_provider_libraries.data_classes.model_related import (
+    WPModelDataProperties,
+    WPModelGeoTemporalProperties,
+    WPModelIdentity,
+)
+from weather_provider_libraries.data_classes.requests import WPLRequest
 from weather_provider_libraries.utils.pint_utils import validate_xarray_dataset_with_pint_units
 
 
 class WeatherProviderModel:
     """A base class for all weather provider models."""
 
-    def __init__(self):
+    def __init__(
+        self,
+        model_identity: WPModelIdentity,
+        model_data_properties: WPModelDataProperties,
+        model_geo_temporal_properties: WPModelGeoTemporalProperties,
+        model_factors: list[ModelFactor],
+    ):
         """The constructor for the WeatherProviderModel class."""
-        ...
+        self.identity = model_identity
+        self.data_properties = model_data_properties
+        self.geo_temporal_properties = model_geo_temporal_properties
+        self.factors = model_factors
 
     @property
-    def metadata(self) -> dict[str, str | dict]:
+    def metadata(self) -> dict[str, str | dict[str, str]]:
         """Return the metadata for the model.
 
         Returns:
@@ -28,14 +44,32 @@ class WeatherProviderModel:
                     The metadata for the model.
 
         """
-        ...
+        metadata = self.identity.metadata
+        metadata_2 = {
+            "Data Properties": self.data_properties.metadata,
+            "Geo Temporal Properties": self.geo_temporal_properties.metadata,
+        }
+        return metadata | metadata_2
+
+    @property
+    def known_factors_as_string(self) -> list[str]:
+        """Return the known factors for the model.
+
+        Returns:
+            list[str]:
+                The known factors for the model as a list of strings.
+
+        """
+        factor_string_list = [factor.id for factor in self.factors]
+
+        return factor_string_list
 
     @property
     def id(self) -> str:
         """Getter for the id property. Returns the id of the model."""
-        ...
+        return self.identity.id
 
-    def get_data_by_request(self) -> xr.Dataset:
+    def get_data_by_request(self, request: WPLRequest) -> xr.Dataset:
         """Retrieve data from the model based on a request.
 
         Returns:
@@ -43,7 +77,7 @@ class WeatherProviderModel:
                     An xarray dataset containing the requested data.
 
         """
-        ...
+        raise NotImplementedError("Haven't implemented this method yet.")
 
     def convert_data_to_unit_system(self, data_to_convert: xr.Dataset, target_unit_system) -> xr.Dataset:
         """Convert the data to a target unit system.
@@ -71,5 +105,5 @@ class WeatherProviderModel:
         validate_xarray_dataset_with_pint_units(data_to_convert)
 
         # 2. Convert the data to the target unit system
-        converted_data = convert_dataset_to_target_unit_system(data_to_convert, target_unit_system, self.known_factors)
+        converted_data = convert_dataset_to_target_unit_system(data_to_convert, target_unit_system, self.factors)
         return converted_data

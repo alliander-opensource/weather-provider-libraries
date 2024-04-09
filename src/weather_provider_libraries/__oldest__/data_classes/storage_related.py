@@ -9,8 +9,10 @@ from enum import Enum
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from weather_provider_libraries.data_classes.other import TimePeriod
-from weather_provider_libraries.utils.transformation.string_transformers import parse_bytesize_to_easily_readable
+from weather_provider_libraries.__oldest__.data_classes.other import TimePeriod
+from weather_provider_libraries.__oldest__.utils.transformation.string_transformers import (
+    parse_bytesize_to_easily_readable,
+)
 
 
 class StorageMode(str, Enum):

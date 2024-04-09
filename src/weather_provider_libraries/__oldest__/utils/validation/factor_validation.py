@@ -5,8 +5,6 @@
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
-from weather_provider_libraries.defaults.eccodes_listing import KNOWN_ECCODES_FACTORS_BY_ID
-
 
 def validate_eccodes_factors_list_by_id_code(potential_factors: list[int]) -> bool:
     """A method aimed at validating a list of eccodes factors by their suggested id code.

@@ -168,12 +168,12 @@ class WPModelGeoTemporalProperties(BaseModel):
 
     Warnings:
         area_bounding_box:
-            If the area_bounding_box attribute is not set, the model will not know if a request is out of bounds, and simply
-            retrieve the data found closest to any requested coordinate, even if it is hundreds of kilometers/miles away
-            from the originally requested coordinate!
+            If the area_bounding_box attribute is not set, the model will not know if a request is out of bounds, and
+            simply retrieve the data found closest to any requested coordinate, even if it is hundreds of
+            kilometers/miles away from the originally requested coordinate!
         source_crs:
-            The source_crs attribute is used to allow for transformations into other coordinate systems. Each CRS has its
-            own boundary areas, however, which means that not every CRS may be compatible with the source CRS!
+            The source_crs attribute is used to allow for transformations into other coordinate systems. Each CRS has
+            its own boundary areas, however, which means that not every CRS may be compatible with the source CRS!
 
     Notes:
         time_range:

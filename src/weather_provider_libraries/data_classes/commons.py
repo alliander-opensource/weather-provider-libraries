@@ -1,13 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/ python
 
 #  -------------------------------------------------------
 #  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
+from typing import Self
 
 import numpy as np
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pyproj import CRS, Transformer
 
 from weather_provider_libraries.data_classes.constants import DEFAULT_DATETIME_FORMAT, DEFAULT_TIMEDELTA_FORMAT
 from weather_provider_libraries.utils.validators import validation_of_datetime64_elements
@@ -41,12 +43,12 @@ class TimePeriod(BaseModel):
     model_config = ConfigDict(validate_assignment=True, arbitrary_types_allowed=True, extra="allow")
 
     # Pydantic validators
-    validate_start = field_validator("start")(validation_of_datetime64_elements)
-    validate_end = field_validator("end")(validation_of_datetime64_elements)
-    validate_first_moment_allowed_in_period = field_validator("first_moment_allowed_in_period")(
+    validate_start = field_validator("start", mode="before")(validation_of_datetime64_elements)
+    validate_end = field_validator("end", mode="before")(validation_of_datetime64_elements)
+    validate_first_moment_allowed_in_period = field_validator("first_moment_allowed_in_period", mode="before")(
         validation_of_datetime64_elements
     )
-    validate_last_moment_allowed_in_period = field_validator("last_moment_allowed_in_period")(
+    validate_last_moment_allowed_in_period = field_validator("last_moment_allowed_in_period", mode="before")(
         validation_of_datetime64_elements
     )
 
@@ -115,3 +117,60 @@ class TimePeriod(BaseModel):
             if isinstance(self.last_moment_allowed_in_period, np.datetime64)
             else (np.datetime64("now").astype(DEFAULT_DATETIME_FORMAT) + self.last_moment_allowed_in_period)
         )
+
+
+class GeoLocation(BaseModel):
+    """A dataclass aimed at storing simple geo locations."""
+
+    latitude: float
+    longitude: float
+    coordinate_system: int = 4326
+
+    model_config = ConfigDict(validate_assignment=True)
+
+    # Pydantic validators
+    @field_validator("coordinate_system", mode="before")
+    def __validate_coordinate_system(cls, value):
+        """Check if the coordinate system is a valid one."""
+        try:
+            CRS.from_epsg(int(value))
+        except ValueError as val_error:
+            raise ValueError(
+                f"The coordinate system [{value}] is not a valid one. "
+                f"Please use an EPSG code to represent the coordinate system."
+            ) from val_error
+
+        return value
+
+    @property
+    def is_valid(self) -> bool:
+        """Check if the current GeoLocation is valid."""
+        bounds = CRS.from_epsg(self.coordinate_system).area_of_use.bounds
+
+        return bounds[0] <= self.longitude <= bounds[2] and bounds[1] <= self.latitude <= bounds[3]
+
+    def get_coordinate_translated_for_crs(self, crs: int) -> Self:
+        """Get the coordinates in the current instance for a specific coordinate system."""
+        if not self.is_valid:
+            raise ValueError(
+                f"The current GeoLocation [{self.latitude}, {self.longitude}] is not valid for the current "
+                f"coordinate system [{self.coordinate_system}]. Translation is therefore not possible."
+            )
+
+        source_crs = CRS.from_epsg(self.coordinate_system)
+        target_crs = CRS.from_epsg(crs)
+
+        coordinate_transformer = Transformer.from_crs(source_crs, target_crs)
+        translated_location = coordinate_transformer.transform(self.longitude, self.latitude)
+
+        translated_geo_location = GeoLocation(
+            latitude=translated_location[1], longitude=translated_location[0], coordinate_system=crs
+        )
+
+        if not translated_geo_location.is_valid:
+            raise ValueError(
+                f"The current GeoLocation [{self.latitude}, {self.longitude}] is not valid for the target "
+                f"coordinate system [{crs}]. Translation is therefore not possible."
+            )
+
+        return translated_geo_location

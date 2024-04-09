@@ -5,8 +5,8 @@
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
-from weather_provider_libraries.data_classes.source_related import SourceIdentity
-from weather_provider_libraries.wpl_meteo_model import WPLMeteoModel
+from weather_provider_libraries.__oldest__.data_classes import SourceIdentity
+from weather_provider_libraries.__oldest__.wpl_meteo_model import WPLMeteoModel
 
 
 class WPLMeteoSource:
@@ -27,9 +27,9 @@ class WPLMeteoSource:
         """
         if not isinstance(model, WPLMeteoModel):
             raise TypeError(f"Model {model} is not an instance of WPLMeteoModel")
-        
+
         self.models[model.id] = model
-        
+
     @property
     def metadata(self) -> dict[str, str | dict]:
         """Return the metadata for the source.

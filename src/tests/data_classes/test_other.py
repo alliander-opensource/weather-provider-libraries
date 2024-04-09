@@ -9,7 +9,8 @@ from datetime import UTC, datetime
 
 import numpy as np
 import pytest
-from weather_provider_libraries import DEFAULT_DATETIME_FORMAT, TimePeriod
+from weather_provider_libraries.data_classes.commons import TimePeriod
+from weather_provider_libraries.data_classes.constants import DEFAULT_DATETIME_FORMAT
 
 
 @pytest.mark.parametrize(
@@ -93,11 +94,15 @@ def test_time_period_valid_input(
         TimePeriod objects anyway.
     """
     # Generation
-    if first_allowed_start is None:  # Full version used
+    print(first_allowed_start, last_allowed_end)
+    if first_allowed_start is None:
         time_period = TimePeriod(start=start, end=end)
     else:
         time_period = TimePeriod(
-            start=start, end=end, first_moment_allowed=first_allowed_start, last_moment_allowed=last_allowed_end
+            start=start,
+            end=end,
+            first_moment_allowed_in_period=first_allowed_start,
+            last_moment_allowed_in_period=last_allowed_end,
         )
         # Evaluation
         assert time_period.resolved_first_moment_allowed == expected_resolved_first_allowed_start.astype(
@@ -172,7 +177,10 @@ def test_time_period_invalid_input_resolution(
             TimePeriod(start=start, end=end)
         else:
             TimePeriod(
-                start=start, end=end, first_moment_allowed=first_allowed_start, last_moment_allowed=last_allowed_end
+                start=start,
+                end=end,
+                first_moment_allowed_in_period=first_allowed_start,
+                last_moment_allowed_in_period=last_allowed_end,
             )
 
     # Evaluation

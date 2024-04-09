@@ -43,7 +43,7 @@ def validate_xarray_dataset_with_pint_units(dataset_to_validate: xr.Dataset):
             If a variable within the dataset does not have a 'units' attribute.
             If the 'units' attribute of a variable is not a valid Pint unit string.
     """
-    # 0. Check if the dataset is an xarray dataset
+    # 0. Check if the dataset is a xarray dataset
     if not isinstance(dataset_to_validate, xr.Dataset):
         raise TypeError("The dataset is not an xarray dataset.")
 

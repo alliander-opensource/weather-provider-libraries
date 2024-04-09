@@ -7,9 +7,9 @@
 
 import xarray as xr
 
-from weather_provider_libraries.data_classes.factor_related import EccodesFactor
-from weather_provider_libraries.data_classes.other import UnitSystem
-from weather_provider_libraries.wpl_meteo_model import WPLMeteoModel
+from weather_provider_libraries.__oldest__.data_classes.factor_related import EccodesFactor
+from weather_provider_libraries.__oldest__.data_classes.other import UnitSystem
+from weather_provider_libraries.__oldest__.wpl_meteo_model import WPLMeteoModel
 
 
 class WPLMeteoConverter:
