@@ -45,7 +45,7 @@ class WPModelIdentity(BaseModel):
 
     Raises:
         (Pydantic) ValidationError:
-            If the supplied data isn't valid, or attempts are being made to change data using invalid data, Pydantic's
+            If the supplied data isn't valid, or attempts are being made to change data using invalid data, the Pydantic
             standard range of errors will be raised.
 
     """
@@ -61,7 +61,7 @@ class WPModelIdentity(BaseModel):
         min_length=8,
         max_length=32,
         title="Model Name",
-        description="Short identifying name of the model. Letters only",
+        description="Short identifying name of the model. Letters and spaces only",
         pattern="^[a-zA-Z ]+$",
     )
     description: str = Field(
@@ -122,7 +122,7 @@ class WPModelDataProperties(BaseModel):
 
     Raises:
         (Pydantic) ValidationError:
-            If the supplied data isn't valid, or attempts are being made to change data using invalid data, Pydantic's
+            If the supplied data isn't valid, or attempts are being made to change data using invalid data, the Pydantic
             standard range of errors will be raised.
 
     """
@@ -194,7 +194,7 @@ class WPModelGeoTemporalProperties(BaseModel):
 
     Raises:
         (Pydantic) ValidationError:
-            If the supplied data isn't valid, or attempts are being made to change data using invalid data, Pydantic's
+            If the supplied data isn't valid, or attempts are being made to change data using invalid data, the Pydantic
             standard range of errors will be raised.
 
     """
@@ -226,6 +226,6 @@ class WPModelGeoTemporalProperties(BaseModel):
         return {
             "Source Area Bounding Box": str(self.area_bounding_box),
             "Source CRS": self.source_crs.name,
-            "First Moment allowed": self.time_range.resolved_start.astype(str),
-            "Last Moment allowed": self.time_range.resolved_end.astype(str),
+            "First Moment": self.time_range.resolved_start.astype(str),
+            "Last Moment": self.time_range.resolved_end.astype(str),
         }

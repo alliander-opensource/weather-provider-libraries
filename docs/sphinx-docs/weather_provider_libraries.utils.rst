@@ -1,15 +1,24 @@
 weather\_provider\_libraries.utils package
 ==========================================
 
-Subpackages
------------
+Submodules
+----------
 
-.. toctree::
-   :maxdepth: 4
+weather\_provider\_libraries.utils.file\_utils module
+-----------------------------------------------------
 
-   weather_provider_libraries.utils.other
-   weather_provider_libraries.utils.transformation
-   weather_provider_libraries.utils.validation
+.. automodule:: weather_provider_libraries.utils.file_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+weather\_provider\_libraries.utils.pint\_utils module
+-----------------------------------------------------
+
+.. automodule:: weather_provider_libraries.utils.pint_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Module contents
 ---------------

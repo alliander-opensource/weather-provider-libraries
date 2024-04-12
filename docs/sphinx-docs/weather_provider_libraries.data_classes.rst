@@ -4,10 +4,34 @@ weather\_provider\_libraries.data\_classes package
 Submodules
 ----------
 
-weather\_provider\_libraries.data\_classes.factor\_related module
------------------------------------------------------------------
+weather\_provider\_libraries.data\_classes.commons module
+---------------------------------------------------------
 
-.. automodule:: weather_provider_libraries.data_classes.factor_related
+.. automodule:: weather_provider_libraries.data_classes.commons
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+weather\_provider\_libraries.data\_classes.constants module
+-----------------------------------------------------------
+
+.. automodule:: weather_provider_libraries.data_classes.constants
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+weather\_provider\_libraries.data\_classes.enums module
+-------------------------------------------------------
+
+.. automodule:: weather_provider_libraries.data_classes.enums
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+weather\_provider\_libraries.data\_classes.factors module
+---------------------------------------------------------
+
+.. automodule:: weather_provider_libraries.data_classes.factors
    :members:
    :undoc-members:
    :show-inheritance:
@@ -20,26 +44,10 @@ weather\_provider\_libraries.data\_classes.model\_related module
    :undoc-members:
    :show-inheritance:
 
-weather\_provider\_libraries.data\_classes.other module
--------------------------------------------------------
+weather\_provider\_libraries.data\_classes.requests module
+----------------------------------------------------------
 
-.. automodule:: weather_provider_libraries.data_classes.other
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-weather\_provider\_libraries.data\_classes.source\_related module
------------------------------------------------------------------
-
-.. automodule:: weather_provider_libraries.data_classes.source_related
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-weather\_provider\_libraries.data\_classes.storage\_related module
-------------------------------------------------------------------
-
-.. automodule:: weather_provider_libraries.data_classes.storage_related
+.. automodule:: weather_provider_libraries.data_classes.requests
    :members:
    :undoc-members:
    :show-inheritance:

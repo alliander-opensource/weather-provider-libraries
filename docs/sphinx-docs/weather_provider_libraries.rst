@@ -8,40 +8,16 @@ Subpackages
    :maxdepth: 4
 
    weather_provider_libraries.data_classes
-   weather_provider_libraries.defaults
+   weather_provider_libraries.harmonization
    weather_provider_libraries.utils
 
 Submodules
 ----------
 
-weather\_provider\_libraries.wpl\_meteo\_converter module
----------------------------------------------------------
+weather\_provider\_libraries.wpl\_model module
+----------------------------------------------
 
-.. automodule:: weather_provider_libraries.wpl_meteo_converter
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-weather\_provider\_libraries.wpl\_meteo\_model module
------------------------------------------------------
-
-.. automodule:: weather_provider_libraries.wpl_meteo_model
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-weather\_provider\_libraries.wpl\_meteo\_source module
-------------------------------------------------------
-
-.. automodule:: weather_provider_libraries.wpl_meteo_source
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-weather\_provider\_libraries.wpl\_meteo\_storage module
--------------------------------------------------------
-
-.. automodule:: weather_provider_libraries.wpl_meteo_storage
+.. automodule:: weather_provider_libraries.wpl_model
    :members:
    :undoc-members:
    :show-inheritance:

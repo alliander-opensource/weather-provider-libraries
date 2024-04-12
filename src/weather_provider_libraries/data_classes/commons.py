@@ -12,7 +12,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 from pyproj import CRS, Transformer
 
 from weather_provider_libraries.data_classes.constants import DEFAULT_DATETIME_FORMAT, DEFAULT_TIMEDELTA_FORMAT
-from weather_provider_libraries.utils.validators import validation_of_datetime64_elements
+from weather_provider_libraries.utils.validation.date_time_related_validators import validation_of_datetime64_elements
 
 """The purpose of this module is to house any dataclasses that don't specifically belong to one of the project's
 main classes.
@@ -26,7 +26,14 @@ Currently, the dataclasses in here are the following:
 
 
 class TimePeriod(BaseModel):
-    """A dataclass aimed at storing simple time periods."""
+    """A dataclass aimed at storing simple time periods.
+
+    Notes:
+        This class is used to properly handle the way time periods are handled within the project.
+        It automatically handles supplied datetime and timedelta values and converts them to standardized np.datetime64
+        values. It also assures that the period is valid for project purposes, and allows for customized validation
+        based on boundary values.
+    """
 
     start: np.datetime64 | np.timedelta64
     end: np.datetime64 | np.timedelta64
@@ -43,12 +50,12 @@ class TimePeriod(BaseModel):
     model_config = ConfigDict(validate_assignment=True, arbitrary_types_allowed=True, extra="allow")
 
     # Pydantic validators
-    validate_start = field_validator("start", mode="before")(validation_of_datetime64_elements)
-    validate_end = field_validator("end", mode="before")(validation_of_datetime64_elements)
-    validate_first_moment_allowed_in_period = field_validator("first_moment_allowed_in_period", mode="before")(
+    _validate_start = field_validator("start", mode="before")(validation_of_datetime64_elements)
+    _validate_end = field_validator("end", mode="before")(validation_of_datetime64_elements)
+    _validate_first_moment_allowed_in_period = field_validator("first_moment_allowed_in_period", mode="before")(
         validation_of_datetime64_elements
     )
-    validate_last_moment_allowed_in_period = field_validator("last_moment_allowed_in_period", mode="before")(
+    _validate_last_moment_allowed_in_period = field_validator("last_moment_allowed_in_period", mode="before")(
         validation_of_datetime64_elements
     )
 
@@ -120,7 +127,17 @@ class TimePeriod(BaseModel):
 
 
 class GeoLocation(BaseModel):
-    """A dataclass aimed at storing simple geo locations."""
+    """A dataclass aimed at storing simple geolocations.
+
+    Notes:
+        The GeoLocation class is aimed at storing simple geolocations. It assures basic validity for project purposes,
+        and allows for setting locations using latitude and longitude values. The class also allows for easy conversion
+        into other CRS systems.
+
+    Warnings:
+        While the class refers to the coordinates as latitude and longitude, this is done only for the sake of clarity
+        on which coordinate component should go where. (As X,Y or Y,X can be confusing, depending on the CRS)
+    """
 
     latitude: float
     longitude: float
@@ -145,12 +162,25 @@ class GeoLocation(BaseModel):
     @property
     def is_valid(self) -> bool:
         """Check if the current GeoLocation is valid."""
+        # Only if the coordinate is within bounds for the current coordinate system, the coordinate is valid.
         bounds = CRS.from_epsg(self.coordinate_system).area_of_use.bounds
-
         return bounds[0] <= self.longitude <= bounds[2] and bounds[1] <= self.latitude <= bounds[3]
 
     def get_coordinate_translated_for_crs(self, crs: int) -> Self:
-        """Get the coordinates in the current instance for a specific coordinate system."""
+        """Get the coordinates in the current instance for a specific coordinate system.
+
+        Args:
+            crs (int):
+                The EPSG code of the coordinate system to translate the current coordinates to.
+
+        Returns:
+            GeoLocation:
+                A new GeoLocation instance with the translated coordinates.
+
+        Raises:
+            ValueError:
+                If the current GeoLocation is not valid for the current coordinate system, or if the translated.
+        """
         if not self.is_valid:
             raise ValueError(
                 f"The current GeoLocation [{self.latitude}, {self.longitude}] is not valid for the current "

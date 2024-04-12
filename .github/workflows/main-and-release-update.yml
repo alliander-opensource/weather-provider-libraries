@@ -1,0 +1,63 @@
+name: Run tests and update SonarCloud.io
+on:
+  push:
+    branches:
+      - main
+      - release-*
+jobs:
+  prepare:
+    name: Prepare repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.version }}
+      - name: Install Poetry
+        run: pipx install poetry
+  tests-and-sonarcloud:
+    needs: prepare
+    strategy:
+      matrix:
+        version: ["3.11", "3.12"]
+    name: Testing and updating SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - name: Poetry install dependencies
+        run: poetry install --with dev
+      - name: Run tests
+        run: poetry run pytest
+      - name: Run Coverage
+        run: |
+          poetry run coverage run -m pytest
+          poetry run coverage report
+      - name: Update SonarCloud
+        if: matrix.version == '3.11'
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  package-creation-and-upload:
+    needs: prepare
+    name: Create package and upload to PyPI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Poetry install dependencies
+        run: poetry install
+# TODO: Finish
+#      - name: Get application version
+#        if: github.ref == 'refs/heads/main'
+#
+#      - name: Build package
+#        run: |
+#          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+#          echo "Package version: ${{ env.package_version }}"
+#          poetry version ${{ env.package_version }}
+#          poetry publish --build
+
+      # 6. Build package
+      # 7. Upload package to PyPI and Artifactory

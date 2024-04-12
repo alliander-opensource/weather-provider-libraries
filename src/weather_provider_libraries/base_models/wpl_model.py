@@ -30,10 +30,27 @@ class WeatherProviderModel:
         model_factors: list[ModelFactor],
     ):
         """The constructor for the WeatherProviderModel class."""
+        if not isinstance(model_identity, WPModelIdentity):
+            raise ValueError("The model_identity parameter must be an instance of WPModelIdentity.")
+        if not isinstance(model_data_properties, WPModelDataProperties):
+            raise ValueError("The model_data_properties parameter must be an instance of WPModelDataProperties.")
+        if not isinstance(model_geo_temporal_properties, WPModelGeoTemporalProperties):
+            raise ValueError(
+                "The model_geo_temporal_properties parameter must be an instance of WPModelGeoTemporalProperties."
+            )
+        if not isinstance(model_factors, list):
+            raise ValueError("The model_factors parameter must be a list.")
+        if not isinstance(model_factors[0], ModelFactor):
+            raise ValueError("The model_factors parameter must be a list of ModelFactor instances.")
+
         self.identity = model_identity
         self.data_properties = model_data_properties
         self.geo_temporal_properties = model_geo_temporal_properties
         self.factors = model_factors
+
+    def __str__(self):
+        """Return a string representation of the model."""
+        return f"WeatherProviderModel[{self.identity.id} - {self.identity.name}]"
 
     @property
     def metadata(self) -> dict[str, str | dict[str, str]]:
@@ -68,6 +85,11 @@ class WeatherProviderModel:
     def id(self) -> str:
         """Getter for the id property. Returns the id of the model."""
         return self.identity.id
+
+    @property
+    def is_valid(self) -> bool:
+        """Check if the current model is valid."""
+        return all(factor.is_valid for factor in self.factors)
 
     def get_data_by_request(self, request: WPLRequest) -> xr.Dataset:
         """Retrieve data from the model based on a request.
