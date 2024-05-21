@@ -12,220 +12,175 @@ from pyproj import CRS
 from pyproj.aoi import BBox
 
 from weather_provider_libraries.data_classes.commons import TimePeriod
-from weather_provider_libraries.data_classes.enums import DataStorageMode
-
-"""This module contains the data-classes make up the WeatherProviderModel main base class."""
+from weather_provider_libraries.data_classes.enums import WPDataStorageMode
 
 
 class WPModelIdentity(BaseModel):
-    """A class to hold the identity of a WeatherProviderModel class.
+    """A class representing the identity of a weather provider model.
 
-    This immutable dataclass holds a number of attributes, aimed at allowing the project and its users identify and
-         address the model in question. The only output besides the attributes themselves are the [metadata] property,
-         intended to retrieve a visual dictionary representation of the WPL Meteo Model that can be used for notebook or
-         API purposes.
-
-    Attributes:
-            id (str):
-                The unique identifying code used to address the model. This is used by WPL Meteo Source classes and the
-                 project's API component to identify the model.
-            name (str):
-                A short name for the model. This will be the human-readable name for this model. While it doesn't need
-                to be unique itself, it is recommended to use a unique name to prevent any confusion. This name is used
-                in logs and certain views to represent the model.
-            description (str):
-                A short description for the model. Ideally it tells of the model's purpose, background, contents and
-                applicability.
-            information_url (HttpUrl | IPv4Address | IPv6Address):
-                A link holding a URL or IP address where information on the model or it's data source can be found.
-                It should hold at least basic information on the model's known factors and usability.
-            license_information(str):
-                A short string holding the licensing information for the model's source data. This can be a short
-                description or a list of license codes that apply, depending on what best represents the information.
-
-    Raises:
-        (Pydantic) ValidationError:
-            If the supplied data isn't valid, or attempts are being made to change data using invalid data, the Pydantic
-            standard range of errors will be raised.
+    This immutable class contains everything relevant about the identity of a singular weather provider model.
 
     """
 
     id: str = Field(
-        min_length=4,
+        min_length=3,
         max_length=12,
-        title="Model Identifier",
-        description="Short string identifier of the model. Lower case letters only",
+        title="Identifier",
+        description="Short string identifier of the Model. Lower case letters only",
         pattern="^[a-z]+$",
     )
     name: str = Field(
-        min_length=8,
+        min_length=4,
         max_length=32,
-        title="Model Name",
-        description="Short identifying name of the model. Letters and spaces only",
+        title="Name",
+        description="Short name of the Model. Letters and spaces only",
         pattern="^[a-zA-Z ]+$",
     )
     description: str = Field(
         min_length=12,
-        max_length=255,
-        title="Model Description",
-        description="A short description of the model. Should contain minimal data on usability and contents",
+        max_length=512,
+        title="Description",
+        description="Short description of the Model. Should contain a brief description of the Model",
     )
     information_url: HttpUrl | IPv4Address | IPv6Address = Field(
-        title="Model Information URL",
-        description="A link to an URL or IP address holding extensive information on the model or it's source data.",
+        title="Source Data Information URL",
+        description="A link to a URL or IP address holding extensive information on the model or it's source data",
     )
     license_information: str = Field(
         min_length=2,
-        max_length=255,
-        title="Model Licensing Information",
-        description="Licensing information for the model's source data. Where possible use existing licensing codes",
+        max_length=512,
+        title="Data Licensing Information",
+        description="Information about the licensing of the model data. Should preferably contain a "
+        "SPDX-License-Identifier, and otherwise a brief description of the license.",
     )
 
-    # Pydantic class configuration
-    model_config = ConfigDict(frozen=True)
+    # Pydantic class configuration:
+    model_config = ConfigDict(frozen=True, extra="forbid")
 
     @property
     def metadata(self) -> dict[str, str]:
-        """Return a metadata dictionary representation of this ModelIdentity object."""
+        """Return the metadata for the model.
+
+        Returns:
+            dict[str, str]:
+                    The metadata for the model.
+        """
         return {
-            "ID": self.id,
-            "Name": self.name,
-            "Description": self.description,
-            "Information URL": str(self.information_url),
-            "License Information": self.license_information,
+            self.model_fields["id"].title: self.id,
+            self.model_fields["name"].title: self.name,
+            self.model_fields["description"].title: self.description,
+            self.model_fields["information_url"].title: self.information_url,
+            self.model_fields["license_information"].title: self.license_information,
         }
 
 
 class WPModelDataProperties(BaseModel):
-    """A class to hold the data properties of a WeatherProviderModel class.
+    """A class that holds information on how the model data is structured and formatted.
 
-    This immutable dataclass holds properties relating to the nature of the source data that the model can access.
+    This immutable class contains everything relevant about the data properties of a singular weather provider model.
+    These properties are those relating to the nature of the data as it exists globally and not its detailed contents.
 
-    Attributes:
-        directly_accessible (bool):
-            A boolean indicating if requests will directly access the source data itself, or not. All models with this
-            attribute set to [True] will allow you to specifically request data from the source itself, regardless of
-            any set cache or archive. Models that do not store data at all should always have this set to [True]!
-        predictive_model (bool):
-            A boolean indicating if the model's source data is predictive in nature. Setting this to [True] will allow
-            model data to also be requested via [prediction_moment]. The model data should of course have such a
-            moment, for it to work.
-        singular_datapoint (bool):
-            A boolean indicating that the model's source consist of a singular datapoint. Some data sources will only
-            supply data "now", meaning there is no concept of history. As such a model with this property set to [True]
-             will not do anything with parameters related to timeframes.
-             The default value is [False], meaning that models are by default expected to have multiple datapoints.
-        storage_mode_to_use (StorageMode):
-            A StorageMode object indicating the WPL Meteo Storage type to use for caching and/or archiving request
-            data. This attribute is used to configure a WPL Meteo Storage object for handling data.
-            The default value is [StorageMode.NO_STORAGE], meaning that no data will be stored.
-
-    Raises:
-        (Pydantic) ValidationError:
-            If the supplied data isn't valid, or attempts are being made to change data using invalid data, the Pydantic
-            standard range of errors will be raised.
 
     """
 
-    directly_accessible: bool = Field(
-        title="Model is Directly Accessible",
-        description="A boolean indicating if the model's source data is directly accessible [True] or not [False]",
+    direct_access_is_possible: bool = Field(
+        title="Direct Data Access is Possible",
+        description="A boolean indicating whether direct access to the model data is possible."
+        "Used to determine if the request can be handled directly or if it should be handed to the broker.",
     )
-    predictive_model: bool = Field(
-        title="Model is Predictive",
-        description="A boolean indicating if the model's source data is predictive in nature [True] or not [False]",
+    data_is_predictive_in_nature: bool = Field(
+        title="Data is Predictive in Nature",
+        description="A boolean indicating whether the model data is predictive in nature."
+        "Used to determine if the data is historical or predictive in nature.",
     )
-    singular_datapoint: bool = Field(
-        default=False,
-        title="Model Output is Singular Datapoint",
-        description="A boolean indicating if the model's source data is just a single datapoint [True] or not [False]",
+    data_is_temporal: bool = Field(
+        default=True,
+        title="Data is Temporal in Nature",
+        description="A boolean indicating whether the model data is temporal in nature or that its value(s) only "
+        "represent a single moment/period in time.",
     )
-    storage_mode_to_use: DataStorageMode = Field(
-        default=DataStorageMode.NONE,
-        title="Model Storage Mode",
-        description="A StorageMode object indicating if and how the model's source data should be stored",
+    data_is_geospatial: bool = Field(
+        default=True,
+        title="Data is Geospatial",
+        description="A boolean indicating whether the model data is geospatial in nature or that its value(s) "
+        "represent the full zone the model is associated with.",
     )
 
-    # Pydantic class configuration
-    model_config = ConfigDict(frozen=True)
+    # Pydantic class configuration:
+    model_config = ConfigDict(frozen=True, extra="forbid")
 
     @property
-    def metadata(self) -> dict[str, str]:
-        """Return a metadata dictionary representation of this ModelProperties object."""
+    def metadata(self) -> dict[str, bool]:
+        """Return the metadata for the model data properties.
+
+        Returns:
+            dict[str, bool]:
+                    The metadata for the model data properties.
+        """
         return {
-            "Is Directly Accessible": str(self.directly_accessible),
-            "Is Predictive in Nature": str(self.predictive_model),
-            "Consists of a Singular Datapoint": str(self.singular_datapoint),
-            "Storage Mode": self.storage_mode_to_use.value,
+            self.model_fields["direct_access_is_possible"].title: self.direct_access_is_possible,
+            self.model_fields["data_is_predictive_in_nature"].title: self.data_is_predictive_in_nature,
+            self.model_fields["data_is_temporal"].title: self.data_is_temporal,
+            self.model_fields["data_is_geospatial"].title: self.data_is_geospatial,
         }
 
 
 class WPModelGeoTemporalProperties(BaseModel):
-    """A class to hold the geographical and temporal properties of a WeatherProviderModel class.
+    """A class that holds the geospatial and temporal properties of a model.
 
-    This immutable dataclass holds properties related to the model's geographical and temporal properties, meaning that
-    it contains all information on where and when the source's data can come from.
-
-    Warnings:
-        area_bounding_box:
-            If the area_bounding_box attribute is not set, the model will not know if a request is out of bounds, and
-            simply retrieve the data found closest to any requested coordinate, even if it is hundreds of
-            kilometers/miles away from the originally requested coordinate!
-        source_crs:
-            The source_crs attribute is used to allow for transformations into other coordinate systems. Each CRS has
-            its own boundary areas, however, which means that not every CRS may be compatible with the source CRS!
-
-    Notes:
-        time_range:
-            Any np.timedelta64 relative moments used here will be calculated from the moment of "now" at the time of
-            usage.
-
-    Attributes:
-        area_bounding_box (BBox):
-            An optional PyProj Bounding Box object holding the source data's geographical boundaries. If set, the model
-            uses this information to report requests outside these boundaries as considered invalid.
-        time_range (TimePeriod):
-            An TimePeriod object indicating the available time frame from which data can be retrieved from the data
-            source.
-        source_crs (CRS):
-            A PyProj CRS object holding the CRS identity of the coordinate system used by data retrieved from the
-            source data. If not set WGS84 (EPSG:4326) is assumed to be coordinate system used.
-            The CRS set here is used to allow for transformations into other coordinate systems.
-
-    Raises:
-        (Pydantic) ValidationError:
-            If the supplied data isn't valid, or attempts are being made to change data using invalid data, the Pydantic
-            standard range of errors will be raised.
-
+    This immutable class contains everything relevant about the geospatial and temporal properties of a singular weather
+    provider model. These properties represent the spatial and temporal characteristics of the model data as a whole
+    and not any specific factors.
     """
 
     area_bounding_box: BBox | None = Field(
         default=None,
-        title="Model Area Bounding Box",
-        description="A PyProj BBox object representing the outer bounds of the data covered by this model's data "
-        "source",
+        title="Bounding Box for Model Data Geospatial Area",
+        description="The bounding box for the geospatial area the model data covers. "
+        "If the model data covers a single point, the eastern and western longitudes and the northern and "
+        "southern latitudes should be the same.",
     )
-    time_range: TimePeriod = Field(
-        title="Model Time Range",
-        description="A TimePeriod (internal class) object representing the period of time that the model's data source "
-        "covers",
+    available_time_period: TimePeriod = Field(
+        title="Available Time Period for Model Data",
+        description="The time period for which the model data is available for acquisition. This doesn't need to be "
+        "very accurate, but should at least give a rough idea of the time period the data covers.",
     )
-    source_crs: CRS = Field(
-        default=CRS("EPSG:4326"),
-        title="Model CRS",
-        description="A PyProj CRS object representing the coordinate system that the model's data source uses to "
-        "supply data to the project",
+    data_crs: CRS = Field(
+        title="Coordinate Reference System for Model Data",
+        description="The coordinate reference system (CRS) that applies to the model's data source. "
+        "This should be a valid PyProj CRS.",
     )
 
-    # Pydantic class configuration
-    model_config = ConfigDict(frozen=True, arbitrary_types_allowed=True)
+    # Pydantic class configuration:
+    model_config = ConfigDict(frozen=True, extra="forbid", arbitrary_types_allowed=True)
 
-    @property
-    def metadata(self) -> dict[str, str]:
-        """Return a metadata dictionary representation of this ModelGeography object."""
-        return {
-            "Source Area Bounding Box": str(self.area_bounding_box),
-            "Source CRS": self.source_crs.name,
-            "First Moment": self.time_range.resolved_start.astype(str),
-            "Last Moment": self.time_range.resolved_end.astype(str),
-        }
+
+class WPModelDataStorageSettings(BaseModel):
+    """A class that holds the data storage settings for a model.
+
+    This immutable class contains everything relevant about the data storage settings of a singular weather provider
+    model.
+    """
+
+    storage_mode: WPDataStorageMode = Field(
+        default=WPDataStorageMode.NONE,
+        title="Data Storage Mode",
+        description="The data storage mode for the model. This indicates how the model data is stored, if at all.",
+    )
+    cache_size_in_mb: int = Field(
+        default=512,
+        title="Cache Size in Megabytes",
+        description="The size of the cache in megabytes. This is the amount of memory that can be used to store the "
+        "model data in memory. Ignored if the storage mode does not support a cache.",
+    )
+    archive_period: TimePeriod = Field(
+        title="Archive Period",
+        description="The period for which the model data is archived. This is the time period for which the model data "
+        "is stored in the cache. Ignored if the storage mode does not support an archive.",
+    )
+    max_archive_size_in_mb: int = Field(
+        default=1024,
+        title="Maximum Archive Size in Megabytes",
+        description="The maximum size of the archive in megabytes. This is the maximum amount of memory that can be "
+        "used to store the model data in the archive. Ignored if the storage mode does not support an archive.",
+    )

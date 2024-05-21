@@ -675,7 +675,7 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 # Extra's
-testing_source/
+src/weather_provider_sources/
 
 # All of IDEA really
 .idea/

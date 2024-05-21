@@ -1,206 +1,128 @@
-#!/usr/bin/ python
+#!/usr/bin/env python
+
 
 #  -------------------------------------------------------
 #  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
-from typing import Self
+from datetime import datetime
 
+#  -------------------------------------------------------
+#  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
+#  SPDX-License-Identifier: MPL-2.0
+#  -------------------------------------------------------
 import numpy as np
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
-from pyproj import CRS, Transformer
+from pydantic import BaseModel, ConfigDict, PrivateAttr
 
-from weather_provider_libraries.data_classes.constants import DEFAULT_DATETIME_FORMAT, DEFAULT_TIMEDELTA_FORMAT
-from weather_provider_libraries.utils.validation.date_time_related_validators import validation_of_datetime64_elements
-
-"""The purpose of this module is to house any dataclasses that don't specifically belong to one of the project's
-main classes.
- 
-Currently, the dataclasses in here are the following:
-    TimePeriod:
-        A dataclass for storing simple time periods. Assures basic period and value validity for project purposes, 
-        and allows for setting periods using [datetime], [np.datetime64] and [np.timedelta64]. 
-
-"""
+from weather_provider_libraries.utils.constants import DEFAULT_DATETIME_FORMAT, DEFAULT_TIMEDELTA_FORMAT
+from weather_provider_libraries.utils.validators.datetime_validation import validation_of_datetime64_elements
 
 
 class TimePeriod(BaseModel):
     """A dataclass aimed at storing simple time periods.
 
-    Notes:
-        This class is used to properly handle the way time periods are handled within the project.
-        It automatically handles supplied datetime and timedelta values and converts them to standardized np.datetime64
-        values. It also assures that the period is valid for project purposes, and allows for customized validation
-        based on boundary values.
+    Attributes:
+        __start (np.datetime64 | np.timedelta64):
+            The start of the time period. Passed to the class as "start" as a datetime64, timedelta64 or datetime
+            object.
+        __end (np.datetime64 | np.timedelta64):
+            The end of the time period. Passed to the class as "end" as a datetime64, timedelta64 or datetime object.
     """
 
-    start: np.datetime64 | np.timedelta64
-    end: np.datetime64 | np.timedelta64
-
-    first_moment_allowed_in_period: np.datetime64 | np.timedelta64 = Field(
-        default=np.datetime64("1869-01-01T00:00").astype(DEFAULT_DATETIME_FORMAT)
-    )
-    last_moment_allowed_in_period: np.datetime64 | np.timedelta64 = Field(
-        default=np.datetime64("now").astype(DEFAULT_DATETIME_FORMAT)
-        + np.timedelta64((20 * 365) + 5, "D").astype(DEFAULT_TIMEDELTA_FORMAT)
-    )
+    __start: np.datetime64 | np.timedelta64 = PrivateAttr()
+    __end: np.datetime64 | np.timedelta64 = PrivateAttr()
 
     # Pydantic class config
-    model_config = ConfigDict(validate_assignment=True, arbitrary_types_allowed=True, extra="allow")
+    model_config = ConfigDict(validate_assignment=True, arbitrary_types_allowed=True, extra="forbid")
 
-    # Pydantic validators
-    _validate_start = field_validator("start", mode="before")(validation_of_datetime64_elements)
-    _validate_end = field_validator("end", mode="before")(validation_of_datetime64_elements)
-    _validate_first_moment_allowed_in_period = field_validator("first_moment_allowed_in_period", mode="before")(
-        validation_of_datetime64_elements
-    )
-    _validate_last_moment_allowed_in_period = field_validator("last_moment_allowed_in_period", mode="before")(
-        validation_of_datetime64_elements
-    )
+    def __init__(
+        self, start: np.datetime64 | np.timedelta64 | datetime, end: np.datetime64 | np.timedelta64 | datetime, **data
+    ):
+        """Initialize the TimePeriod class."""
+        super().__init__(**data)
+        start = validation_of_datetime64_elements(start)
+        end = validation_of_datetime64_elements(end)
 
-    @model_validator(mode="after")
-    def __validate_period(self):
-        """Check if the currently resolved values make up a valid period.
+        if isinstance(start, np.datetime64):
+            self.__start = start.astype(DEFAULT_DATETIME_FORMAT)
+        else:
+            self.__start = start.astype(DEFAULT_TIMEDELTA_FORMAT)
 
-        Because a period based on timedelta64 values could shift from valid TimePeriod into an invalid one, this
-         property allows users to verify before use that the TimePeriod is indeed still valid.
-
-        """
-        if not (self.resolved_first_moment_allowed <= self.resolved_start < self.resolved_last_moment_allowed):
-            raise ValueError(
-                f"TimePeriod [{self.start} - {self.end}]: The current value of [start] ({self.resolved_start}) "
-                f"should always lie between the current first moment allowed ({self.resolved_first_moment_allowed}) "
-                f"and the current last moment allowed ({self.resolved_last_moment_allowed})."
-            )
-
-        if not (self.resolved_first_moment_allowed < self.resolved_end <= self.resolved_last_moment_allowed):
-            raise ValueError(
-                f"TimePeriod [{self.start} - {self.end}]: The current value of [end] ({self.resolved_end}) "
-                f"should always lie between the current first moment allowed ({self.resolved_first_moment_allowed}) "
-                f"and the current last moment allowed ({self.resolved_last_moment_allowed})."
-            )
-
-        if self.resolved_start >= self.resolved_end:
-            raise ValueError(
-                f"A TimePeriod cannot have the resolved value for [start] ({self.resolved_start}) lie after the "
-                f"resolved value for [end] ({self.resolved_end}). "
-                f"Please change period values in a way that [start] lies before [end]!"
-            )
-        return self
+        if isinstance(end, np.datetime64):
+            self.__end = end.astype(DEFAULT_DATETIME_FORMAT)
+        else:
+            self.__end = end.astype(DEFAULT_TIMEDELTA_FORMAT)
 
     @property
-    def resolved_start(self) -> np.datetime64:
-        """Resolve and retrieve the start value as a np.datetime64 value."""
-        return (
-            self.start
-            if isinstance(self.start, np.datetime64)
-            else (np.datetime64("now").astype(DEFAULT_DATETIME_FORMAT) + self.start)
-        )
+    def start(self) -> np.datetime64 | np.timedelta64:
+        """Get the current interpretation of the __start attribute."""
+        if isinstance(self.__start, np.timedelta64):
+            return (np.datetime64("now") + self.__start).astype(DEFAULT_DATETIME_FORMAT)
+
+        return self.__start
 
     @property
-    def resolved_end(self) -> np.datetime64:
-        """Resolve and retrieve the end value as a np.datetime64 value."""
-        return (
-            self.end
-            if isinstance(self.end, np.datetime64)
-            else (np.datetime64("now").astype(DEFAULT_DATETIME_FORMAT) + self.end)
-        )
+    def end(self) -> np.datetime64 | np.timedelta64:
+        """Get the current interpretation of the __end attribute."""
+        if isinstance(self.__end, np.timedelta64):
+            return (np.datetime64("now") + self.__end).astype(DEFAULT_DATETIME_FORMAT)
+
+        return self.__end
 
     @property
-    def resolved_first_moment_allowed(self) -> np.datetime64:
-        """Resolve and retrieve the first_moment_allowed value as a np.datetime64 value."""
-        return (
-            self.first_moment_allowed_in_period
-            if isinstance(self.first_moment_allowed_in_period, np.datetime64)
-            else (np.datetime64("now").astype(DEFAULT_DATETIME_FORMAT) + self.first_moment_allowed_in_period)
-        )
+    def is_period_valid(self) -> bool:
+        """Check if the TimePeriod object is valid."""
+        return self.start < self.end and not np.isnat(self.start)
 
-    @property
-    def resolved_last_moment_allowed(self) -> np.datetime64:
-        """Resolve and retrieve the last_moment_allowed value as a np.datetime64 value."""
-        return (
-            self.last_moment_allowed_in_period
-            if isinstance(self.last_moment_allowed_in_period, np.datetime64)
-            else (np.datetime64("now").astype(DEFAULT_DATETIME_FORMAT) + self.last_moment_allowed_in_period)
-        )
+    def __str__(self):
+        """Return a string representation of the TimePeriod object."""
+        return f"TimePeriod(start={self.start}, end={self.end})"
 
+    def __repr__(self):
+        """Return a string representation of the TimePeriod object."""
+        return f"TimePeriod(start={self.start}, end={self.end})"
 
-class GeoLocation(BaseModel):
-    """A dataclass aimed at storing simple geolocations.
+    def get_current_overlap(self, other_period: "TimePeriod") -> "TimePeriod":
+        """Get the current overlapping period between two TimePeriod objects if it exists.
 
-    Notes:
-        The GeoLocation class is aimed at storing simple geolocations. It assures basic validity for project purposes,
-        and allows for setting locations using latitude and longitude values. The class also allows for easy conversion
-        into other CRS systems.
-
-    Warnings:
-        While the class refers to the coordinates as latitude and longitude, this is done only for the sake of clarity
-        on which coordinate component should go where. (As X,Y or Y,X can be confusing, depending on the CRS)
-    """
-
-    latitude: float
-    longitude: float
-    coordinate_system: int = 4326
-
-    model_config = ConfigDict(validate_assignment=True)
-
-    # Pydantic validators
-    @field_validator("coordinate_system", mode="before")
-    def __validate_coordinate_system(cls, value):
-        """Check if the coordinate system is a valid one."""
-        try:
-            CRS.from_epsg(int(value))
-        except ValueError as val_error:
-            raise ValueError(
-                f"The coordinate system [{value}] is not a valid one. "
-                f"Please use an EPSG code to represent the coordinate system."
-            ) from val_error
-
-        return value
-
-    @property
-    def is_valid(self) -> bool:
-        """Check if the current GeoLocation is valid."""
-        # Only if the coordinate is within bounds for the current coordinate system, the coordinate is valid.
-        bounds = CRS.from_epsg(self.coordinate_system).area_of_use.bounds
-        return bounds[0] <= self.longitude <= bounds[2] and bounds[1] <= self.latitude <= bounds[3]
-
-    def get_coordinate_translated_for_crs(self, crs: int) -> Self:
-        """Get the coordinates in the current instance for a specific coordinate system.
+        Notes:
+            This method uses the current interpretation of the TimePeriod object to check for overlaps.
+            This means that if the TimePeriod object is based on timedelta64 values, the current interpretation
+            of that value will be based on the current time.
 
         Args:
-            crs (int):
-                The EPSG code of the coordinate system to translate the current coordinates to.
+            other_period (TimePeriod):
+                The other TimePeriod object to check for overlaps with.
 
         Returns:
-            GeoLocation:
-                A new GeoLocation instance with the translated coordinates.
+            TimePeriod:
+                A TimePeriod object representing the overlapping period between the two TimePeriod objects.
+                If no overlap exists, the start and end of the returned TimePeriod object will be NaT.
 
-        Raises:
-            ValueError:
-                If the current GeoLocation is not valid for the current coordinate system, or if the translated.
         """
-        if not self.is_valid:
-            raise ValueError(
-                f"The current GeoLocation [{self.latitude}, {self.longitude}] is not valid for the current "
-                f"coordinate system [{self.coordinate_system}]. Translation is therefore not possible."
-            )
+        if self.start > other_period.end or self.end < other_period.start:
+            return TimePeriod(np.datetime64("NaT"), np.datetime64("NaT"))
 
-        source_crs = CRS.from_epsg(self.coordinate_system)
-        target_crs = CRS.from_epsg(crs)
+        return TimePeriod(max(self.start, other_period.start), min(self.end, other_period.end))
 
-        coordinate_transformer = Transformer.from_crs(source_crs, target_crs)
-        translated_location = coordinate_transformer.transform(self.longitude, self.latitude)
+    def does_period_overlap(self, other_period: "TimePeriod") -> bool:
+        """Check if the passed period overlaps with the current TimePeriod object.
 
-        translated_geo_location = GeoLocation(
-            latitude=translated_location[1], longitude=translated_location[0], coordinate_system=crs
-        )
+        Notes:
+            This method used the current interpretation of the TimePeriod object to check for overlaps.
+            This means that if the TimePeriod object is based on timedelta64 values, the current interpretation
+            of that value will be based on the current time. This method uses the get_current_overlap method to
+            establish the current overlap between the two TimePeriod objects and then evaluates by checking if the
+            start of the overlap is not NaT.
 
-        if not translated_geo_location.is_valid:
-            raise ValueError(
-                f"The current GeoLocation [{self.latitude}, {self.longitude}] is not valid for the target "
-                f"coordinate system [{crs}]. Translation is therefore not possible."
-            )
+        Args:
+            other_period (TimePeriod):
+                The other TimePeriod object to check for overlaps with.
 
-        return translated_geo_location
+        Returns:
+            bool:
+                True if the two TimePeriod objects overlap, False otherwise.
+
+        """
+        return not np.isnat(self.get_current_overlap(other_period).start)
