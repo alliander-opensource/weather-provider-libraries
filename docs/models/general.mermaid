@@ -1,0 +1,19 @@
+ %%{init: {'theme':'neutral'}}%%
+classDiagram
+    WeatherRequest <|-- GeoLocation
+    WeatherRequest <|-- TimePeriod
+
+    class WeatherRequest {
+        +location: GeoLocation
+        +factors: list[str]
+        period: TimePeriod
+    }
+    class GeoLocation {
+        +latitude: float
+        +longitude: float
+        +crs: CRS
+    }
+    class TimePeriod {
+        +start: np.datetime64
+        +end: np.datetime64
+    }

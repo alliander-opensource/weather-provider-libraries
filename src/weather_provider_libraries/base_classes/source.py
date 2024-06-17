@@ -6,4 +6,13 @@
 #  -------------------------------------------------------
 
 
-# TODO: Make available the controller and base classes from here
+class WPLSource:
+
+    @property
+    def metadata(self): ...
+
+    def __init__(self): ...
+
+    def get_weather_data(self, model, request): ...
+
+    def get_model_list(self): ...

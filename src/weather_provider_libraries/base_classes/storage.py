@@ -6,4 +6,4 @@
 #  -------------------------------------------------------
 
 
-# TODO: Make available the controller and base classes from here
+class WPLStorage: ...
