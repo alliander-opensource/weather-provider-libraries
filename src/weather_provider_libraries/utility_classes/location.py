@@ -9,6 +9,9 @@ from pydantic import BaseModel, ConfigDict, Field
 from pyproj import CRS, Transformer
 from pyproj.aoi import BBox
 
+from weather_provider_libraries.utils.coordinate_utils import get_xy_order_from_crs, validate_crs, convert_coordinates, \
+    convert_coordinates_from_crs_to_other_crs
+
 
 class WPGeoLocation(BaseModel):
     """A utility class aimed at supplying a default project interface for geographical locations.
@@ -47,6 +50,11 @@ class WPGeoLocation(BaseModel):
 
         return True
 
+    @property
+    def x_y_order(self) -> str:
+        """Check the current WPGeolocation object's x and y order as northing and easting."""
+        return get_xy_order_from_crs(self.coordinate_system)
+
     def as_crs(self, crs: CRS | int = 4326) -> "WPGeoLocation":
         """Convert the location to the specified coordinate system.
 
@@ -59,15 +67,16 @@ class WPGeoLocation(BaseModel):
                 The location converted to the specified coordinate system.
 
         """
-        if isinstance(crs, int):
-            crs = CRS.from_epsg(crs)
-        if not isinstance(crs, CRS):
-            raise ValueError(f"A CRS value needs to be of type [pyproj.CRS] or [int], but was: {type(crs)}")
+        crs = validate_crs(crs)
 
         if self.coordinate_system == crs:
             return self
 
-        return self._convert_to_target_crs(crs)
+        converted_x, converted_y = convert_coordinates_from_crs_to_other_crs(
+            self.x, self.y, self.coordinate_system, crs
+        )
+
+        return WPGeoLocation(x=converted_x, y=converted_y, coordinate_system=crs)
 
     def get_closest_location(self, locations: list["WPGeoLocation"]) -> "WPGeoLocation":
         """Get the closest location from a list of locations.
@@ -129,31 +138,20 @@ class WPGeoLocation(BaseModel):
 
     def _convert_to_wgs84(self) -> "WPGeoLocation":
         """Convert the location to WGS84."""
-        transformer_2 = Transformer.from_crs(self.coordinate_system, CRS.from_epsg(4326), always_xy=True)
-        return transformer_2.transform(self.x, self.y)
+        wgs84_transformer = Transformer.from_crs(self.coordinate_system, CRS.from_epsg(4326))
+        wgs84_x, wgs84_y = wgs84_transformer.transform(self.x, self.y)
+        return WPGeoLocation(x=wgs84_x, y=wgs84_y, coordinate_system=CRS.from_epsg(4326))
 
     def _coordinate_within_bounds(self, target_crs: CRS | int = 4326) -> bool:
         """Check if a coordinate lies within the bounds of the coordinate system."""
         if isinstance(target_crs, int):
             target_crs = CRS.from_epsg(target_crs)
 
-        x, y = self._convert_to_wgs84()
+        # WGS84 uses X for latitude (N,S) and Y for longitude (W,E)
+        wgs84_coord = self._convert_to_wgs84()
         west_bound, south_bound, east_bound, north_bound = target_crs.area_of_use.bounds
 
-        print(west_bound, south_bound, east_bound, north_bound)
-        print(x, y)
-
-        if west_bound <= x <= east_bound and south_bound <= y <= north_bound:
+        if west_bound <= wgs84_coord.y <= east_bound and south_bound <= wgs84_coord.x <= north_bound:
             return True
+
         return False
-
-    def _convert_to_target_crs(self, target_crs: CRS) -> "WPGeoLocation":
-        """Convert the location to the target coordinate system."""
-        x, y = self._convert_to_wgs84()
-
-        if not self._coordinate_within_bounds(target_crs):
-            raise ValueError(f"The location lies outside the bounds of the target coordinate system: {target_crs}")
-
-        transformer = Transformer.from_crs(CRS.from_epsg(4326), target_crs, always_xy=True)
-        transformed_x, transformed_y = transformer.transform(x, y)
-        return WPGeoLocation(x=transformed_x, y=transformed_y, coordinate_system=target_crs)
