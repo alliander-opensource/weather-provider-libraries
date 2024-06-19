@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
 #  -------------------------------------------------------
-#  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
+#  SPDX-FileCopyrightText: 2019-{2024}} Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
 from pyproj import CRS, Transformer
+from pyproj.aoi import BBox
 
 
 def validate_crs(crs: CRS | int) -> CRS:
@@ -77,3 +78,19 @@ def convert_coordinate_to_crs(x: float, y: float, current_crs: CRS | int, target
     transformer = Transformer.from_crs(CRS.from_epsg(4326), target_crs)
 
     return transformer.transform(wgs84_x, wgs84_y)
+
+
+def convert_box_from_crs_to_crs(bbox: BBox, original_crs: CRS, target_crs: CRS) -> BBox:
+    """Convert the given bounding box from one CRS to another."""
+    original_crs = validate_crs(original_crs)
+    target_crs = validate_crs(target_crs)
+
+    if not is_coordinate_withing_target_crs_boundaries(bbox.west, bbox.south, original_crs, target_crs):
+        raise ValueError("The location lies outside the bounds of the target coordinate system")
+
+    if not is_coordinate_withing_target_crs_boundaries(bbox.east, bbox.north, original_crs, target_crs):
+        raise ValueError("The location lies outside the bounds of the target coordinate system")
+
+    transformer = Transformer.from_crs(original_crs, target_crs)
+
+    return BBox(*transformer.transform(bbox.west, bbox.south, bbox.east, bbox.north))

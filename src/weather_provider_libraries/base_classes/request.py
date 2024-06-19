@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 #  -------------------------------------------------------
-#  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
+#  SPDX-FileCopyrightText: 2019-{2024}} Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
@@ -9,9 +9,9 @@ from pydantic import Field, create_model
 from pydantic.main import Model
 
 from weather_provider_libraries.base_classes.request_related.locational_and_temporal_classes import (
-    WPLocation,
     WPTimePeriod,
 )
+from weather_provider_libraries.utility_classes.location import WPGeoLocation
 
 
 def build_weather_request_model(identifier_for_request_model: str, can_request_periods: bool = True) -> Model:
@@ -32,7 +32,7 @@ def build_weather_request_model(identifier_for_request_model: str, can_request_p
 
     field_dictionary = {
         "locations": (
-            list[WPLocation],
+            list[WPGeoLocation],
             Field(title="Locations", description="The locations for which the weather data is requested."),
         ),
         "period": (

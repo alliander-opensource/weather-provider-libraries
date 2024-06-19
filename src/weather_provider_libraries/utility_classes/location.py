@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 #  -------------------------------------------------------
-#  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
+#  SPDX-FileCopyrightText: 2019-{2024}} Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
@@ -11,6 +11,7 @@ from pyproj import CRS, Geod
 from pyproj.aoi import BBox
 
 from weather_provider_libraries.utils.coordinate_utils import (
+    convert_box_from_crs_to_crs,
     convert_coordinate_to_crs,
     get_x_y_order_northing_easting_as_string,
     translate_coordinate_to_wgs84,
@@ -48,6 +49,14 @@ class WPGeoLocation(BaseModel):
         """Return a string representation of the location."""
         return f"WPGeoLocation(({self.x}, {self.y}) - [{self.coordinate_system.name}]:[{self.x_y_order}])"
 
+    def __eq__(self, other):
+        """Check if two locations are equal."""
+        if not isinstance(other, self.__class__):
+            raise TypeError(f"Expected a WPGeoLocation object, got {type(other)}")
+
+        distance = self.get_distance_to_location_in_m(other)
+        return distance == 0
+
     @property
     def is_valid(self) -> bool:
         """Check if the location lies within the bounds of the coordinate system."""
@@ -65,32 +74,12 @@ class WPGeoLocation(BaseModel):
         return get_x_y_order_northing_easting_as_string(self.coordinate_system)
 
     def as_crs(self, crs: CRS | int = 4326) -> "WPGeoLocation":
-        """Convert the location to the specified coordinate system.
-
-        Args:
-            crs (CRS):
-                The coordinate system to convert the location to. The default is WGS84.
-
-        Returns:
-            WPGeoLocation:
-                The location converted to the specified coordinate system.
-
-        """
+        """Convert the location to the specified coordinate system."""
         converted_x, converted_y = convert_coordinate_to_crs(self.x, self.y, self.coordinate_system, crs)
         return WPGeoLocation(x=converted_x, y=converted_y, coordinate_system=crs)
 
     def get_closest_location_from_list(self, locations: list["WPGeoLocation"]) -> "WPGeoLocation":
-        """Get the closest location from a list of locations.
-
-        Args:
-            locations (list[WPGeoLocation]):
-                A list of locations to compare against.
-
-        Returns:
-            WPGeoLocation:
-                The closest location from the list.
-
-        """
+        """Get the closest location from a list of locations."""
         closest_location = None
         closest_distance_in_m = None
 
@@ -119,11 +108,10 @@ class WPGeoLocation(BaseModel):
         """Check if the location lies within the given bounding box."""
         box_crs = validate_crs(box_crs)
 
-        # TODO:
-        #   1. Translate the location to the WGS84 coordinate system.
-        #   2. Translate the bounding box to the WGS84 coordinate system.
+        converted_bounding_box = convert_box_from_crs_to_crs(bounding_box, box_crs, CRS.from_epsg(4326))
+        wgs84_x, wgs84_y = translate_coordinate_to_wgs84(self.x, self.y, self.coordinate_system)
 
-        if bounding_box.contains(self.x, self.y):
+        if converted_bounding_box.contains(BBox(wgs84_y, wgs84_x, wgs84_y, wgs84_x)):
             return True
         return False
 
