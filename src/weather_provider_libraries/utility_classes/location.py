@@ -5,12 +5,17 @@
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
+
 from pydantic import BaseModel, ConfigDict, Field
-from pyproj import CRS, Transformer
+from pyproj import CRS, Geod
 from pyproj.aoi import BBox
 
-from weather_provider_libraries.utils.coordinate_utils import get_xy_order_from_crs, validate_crs, convert_coordinates, \
-    convert_coordinates_from_crs_to_other_crs
+from weather_provider_libraries.utils.coordinate_utils import (
+    convert_coordinate_to_crs,
+    get_x_y_order_northing_easting_as_string,
+    translate_coordinate_to_wgs84,
+    validate_crs,
+)
 
 
 class WPGeoLocation(BaseModel):
@@ -39,6 +44,10 @@ class WPGeoLocation(BaseModel):
         """Return a string representation of the location."""
         return f"WPGeoLocation(({self.x}, {self.y}) - [{self.coordinate_system.name}])"
 
+    def __repr__(self):
+        """Return a string representation of the location."""
+        return f"WPGeoLocation(({self.x}, {self.y}) - [{self.coordinate_system.name}]:[{self.x_y_order}])"
+
     @property
     def is_valid(self) -> bool:
         """Check if the location lies within the bounds of the coordinate system."""
@@ -53,7 +62,7 @@ class WPGeoLocation(BaseModel):
     @property
     def x_y_order(self) -> str:
         """Check the current WPGeolocation object's x and y order as northing and easting."""
-        return get_xy_order_from_crs(self.coordinate_system)
+        return get_x_y_order_northing_easting_as_string(self.coordinate_system)
 
     def as_crs(self, crs: CRS | int = 4326) -> "WPGeoLocation":
         """Convert the location to the specified coordinate system.
@@ -67,18 +76,10 @@ class WPGeoLocation(BaseModel):
                 The location converted to the specified coordinate system.
 
         """
-        crs = validate_crs(crs)
-
-        if self.coordinate_system == crs:
-            return self
-
-        converted_x, converted_y = convert_coordinates_from_crs_to_other_crs(
-            self.x, self.y, self.coordinate_system, crs
-        )
-
+        converted_x, converted_y = convert_coordinate_to_crs(self.x, self.y, self.coordinate_system, crs)
         return WPGeoLocation(x=converted_x, y=converted_y, coordinate_system=crs)
 
-    def get_closest_location(self, locations: list["WPGeoLocation"]) -> "WPGeoLocation":
+    def get_closest_location_from_list(self, locations: list["WPGeoLocation"]) -> "WPGeoLocation":
         """Get the closest location from a list of locations.
 
         Args:
@@ -90,68 +91,45 @@ class WPGeoLocation(BaseModel):
                 The closest location from the list.
 
         """
-        # 0. Validate the input.
+        closest_location = None
+        closest_distance_in_m = None
 
-        # 1. Equalize the coordinate systems.
+        for location in locations:
+            distance_in_m = self.get_distance_to_location_in_m(location)
 
-        # 2. Evaluate the distance between the locations.
+            if not closest_location or distance_in_m < closest_distance_in_m:
+                closest_location = location
+                closest_distance_in_m = distance_in_m
 
-        # 3. Return the closest location.
+        return closest_location
 
-    def lies_within_bounding_box(self, bounding_box: BBox) -> bool:
-        """Check if the location lies within a bounding box.
+    def get_distance_to_location_in_m(self, location: "WPGeoLocation") -> float:
+        """Get the distance to another location in meters."""
+        wgs84_x, wgs84_y = translate_coordinate_to_wgs84(self.x, self.y, self.coordinate_system)
+        location_wgs84_x, location_wgs84_y = translate_coordinate_to_wgs84(
+            location.x, location.y, location.coordinate_system
+        )
 
-        Args:
-            bounding_box (BBox):
-                The bounding box to check against.
+        geodetic_reference_wsg84 = Geod(ellps="WGS84")
+        _, _, distance_in_m = geodetic_reference_wsg84.inv(location_wgs84_x, location_wgs84_y, wgs84_x, wgs84_y)
 
-        Returns:
-            bool:
-                Whether the location lies within the bounding box.
+        return distance_in_m
 
-        """
-        # 0. Validate the input.
+    def lies_within_bounding_box(self, bounding_box: BBox, box_crs: CRS) -> bool:
+        """Check if the location lies within the given bounding box."""
+        box_crs = validate_crs(box_crs)
 
-        # 1. Check if the location lies within the bounding box.
+        # TODO:
+        #   1. Translate the location to the WGS84 coordinate system.
+        #   2. Translate the bounding box to the WGS84 coordinate system.
 
-    def lies_within_radius(self, location: "WPGeoLocation", radius: float, use_miles_as_unit: bool = False) -> bool:
-        """Check if the location lies within a certain radius of another location.
+        if bounding_box.contains(self.x, self.y):
+            return True
+        return False
 
-        Args:
-            location (WPGeoLocation):
-                The location to check against.
-            radius (float):
-                The radius to check for. By default, the unit of measurement is kilometers.
-            use_miles_as_unit (bool):
-                Whether to use miles as the unit of measurement for radius.
-
-        Returns:
-            bool:
-                Whether the location lies within the radius of the other location.
-
-        """
-        # 0. Validate the input.
-
-        # 1. Evaluate the distance between the locations.
-
-        # 2. Check if the distance is within the radius.
-
-    def _convert_to_wgs84(self) -> "WPGeoLocation":
-        """Convert the location to WGS84."""
-        wgs84_transformer = Transformer.from_crs(self.coordinate_system, CRS.from_epsg(4326))
-        wgs84_x, wgs84_y = wgs84_transformer.transform(self.x, self.y)
-        return WPGeoLocation(x=wgs84_x, y=wgs84_y, coordinate_system=CRS.from_epsg(4326))
-
-    def _coordinate_within_bounds(self, target_crs: CRS | int = 4326) -> bool:
-        """Check if a coordinate lies within the bounds of the coordinate system."""
-        if isinstance(target_crs, int):
-            target_crs = CRS.from_epsg(target_crs)
-
-        # WGS84 uses X for latitude (N,S) and Y for longitude (W,E)
-        wgs84_coord = self._convert_to_wgs84()
-        west_bound, south_bound, east_bound, north_bound = target_crs.area_of_use.bounds
-
-        if west_bound <= wgs84_coord.y <= east_bound and south_bound <= wgs84_coord.x <= north_bound:
+    def lies_within_meters_radius(self, location: "WPGeoLocation", meters_of_radius: float) -> bool:
+        """Check if the location lies within a certain radius (meters distance) of another location."""
+        if self.get_distance_to_location_in_m(location) <= meters_of_radius:
             return True
 
         return False

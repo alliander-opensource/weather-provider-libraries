@@ -18,33 +18,45 @@ def validate_crs(crs: CRS | int) -> CRS:
     return crs
 
 
-def get_xy_order_from_crs(crs: CRS | int) -> str:
+def is_x_y_order_northing_easting(crs: CRS | int) -> bool:
+    """Check if the x and y order for the given CRS is northing and easting."""
+    crs = validate_crs(crs)
+    return crs.axis_info[0].direction == "north" and crs.axis_info[1].direction == "east"
+
+
+def get_x_y_order_northing_easting_as_string(crs: CRS | int) -> str:
     """Get the x and y order from the coordinate reference system.
 
     The result is returned as a string indicating if x is northing and y easting or vice versa.
     """
-    crs = validate_crs(crs)
+    if is_x_y_order_northing_easting(crs):
+        return "x=northing, y=easting"
+    return "x=easting, y=northing"
 
-    return f"x={CRS(crs).axis_info[0].direction}ing, y={CRS(crs).axis_info[1].direction}ing"
 
+def translate_coordinate_to_wgs84(x: float, y: float, original_crs: CRS | int) -> tuple[float, float]:
+    """Translate the given coordinates to WGS84."""
+    original_crs = validate_crs(original_crs)
 
-def convert_coordinate_to_wgs84(x: float, y: float) -> tuple[float, float]:
-    """Convert the given coordinates to WGS84."""
-    transformer = Transformer.from_crs("EPSG:4326", "EPSG:4326")
+    transformer = Transformer.from_crs(original_crs, "EPSG:4326")
     return transformer.transform(x, y)
 
-def do_coordinates_lie_within_bounds(x: float, y: float, crs: CRS | int) -> bool:
+
+def is_coordinate_withing_target_crs_boundaries(
+    x: float, y: float, original_crs: CRS | int, target_crs: CRS | int
+) -> bool:
     """Check if the given coordinates lie within the bounds of the given CRS."""
-    crs = validate_crs(crs)
+    original_crs = validate_crs(original_crs)
+    target_crs = validate_crs(target_crs)
 
-    wgs84_x, wgs84_y = convert_coordinate_to_wgs84(x, y)
-    west_bound, south_bound, east_bound, north_bound = crs.area_of_use.bounds
+    wgs84_x, wgs84_y = (x, y) if original_crs.to_epsg() == 4326 else translate_coordinate_to_wgs84(x, y, original_crs)
 
-    # Verify the order of the x and y coordinates for proper area of use comparison
-    if get_xy_order_from_crs(crs) == f"x=northing, y=easting":
-        north_south_value, east_west_value = wgs84_x, wgs84_y
-    else:
+    west_bound, south_bound, east_bound, north_bound = target_crs.area_of_use.bounds
+
+    if is_x_y_order_northing_easting(target_crs):
         north_south_value, east_west_value = wgs84_y, wgs84_x
+    else:
+        north_south_value, east_west_value = wgs84_x, wgs84_y
 
     if west_bound <= east_west_value <= east_bound and south_bound <= north_south_value <= north_bound:
         return True
@@ -52,18 +64,16 @@ def do_coordinates_lie_within_bounds(x: float, y: float, crs: CRS | int) -> bool
     return False
 
 
-def convert_coordinates_from_crs_to_other_crs(x: float, y: float, from_crs: CRS | int, to_crs: CRS | int) -> tuple[
-    float, float]:
+def convert_coordinate_to_crs(x: float, y: float, current_crs: CRS | int, target_crs: CRS | int) -> tuple[float, float]:
     """Convert the given coordinates from one CRS to another."""
-    from_crs = validate_crs(from_crs)
-    to_crs = validate_crs(to_crs)
+    current_crs = validate_crs(current_crs)
+    target_crs = validate_crs(target_crs)
 
-    # Conversion to WGS84 for boundary check and conversion stabilization
-    wgs84_x, wgs84_y = convert_coordinate_to_wgs84(x, y)
+    wgs84_x, wgs84_y = (x, y) if current_crs.to_epsg() == 4326 else translate_coordinate_to_wgs84(x, y, current_crs)
 
-    if not self._coordinate_within_bounds(to_crs):
-        raise ValueError(f"The location lies outside the bounds of the target coordinate system: {to_crs}")
+    if not is_coordinate_withing_target_crs_boundaries(wgs84_x, wgs84_y, CRS.from_epsg(4326), target_crs):
+        raise ValueError(f"The location lies outside the bounds of the target coordinate system: {target_crs}")
 
-    transformer = Transformer.from_crs(CRS.from_epsg(4326), to_crs)
+    transformer = Transformer.from_crs(CRS.from_epsg(4326), target_crs)
 
     return transformer.transform(wgs84_x, wgs84_y)
