@@ -5,47 +5,40 @@
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
-from pydantic import Field, create_model
-from pydantic.main import Model
+from pydantic import ConfigDict, Field
+from pydantic.main import BaseModel
 
-from weather_provider_libraries.base_classes.request_related.locational_and_temporal_classes import (
-    WPTimePeriod,
-)
 from weather_provider_libraries.utility_classes.location import WPGeoLocation
+from weather_provider_libraries.utility_classes.period import WPTimePeriod
 
 
-def build_weather_request_model(identifier_for_request_model: str, can_request_periods: bool = True) -> Model:
-    """A function intended to create one a Weather Provider Request model specific for a model.
+class WPWeatherRequestWithoutPeriod(BaseModel):
+    """A class for a weather request with a period."""
 
-    Args:
-        identifier_for_request_model (str):
-            The name of the Weather Provider Access Suite model that the request model is intended for.
-        can_request_periods (bool, optional):
-            Whether the model can request periods. Defaults to True.
+    locations: list[WPGeoLocation] = Field(
+        title="Locations", description="The locations for which the weather data is requested.", min_length=1
+    )
+    factors: list[str] = Field(title="Factors", description="The factors for which the weather data is requested.")
 
-    Returns:
-        A class with the specified fields and name
+    # Pydantic model configuration
+    model_config = ConfigDict(arbitrary_types_allowed=True, frozen=True, extra="forbid")
 
-    """
-    if not isinstance(identifier_for_request_model, str) or not identifier_for_request_model.isalpha():
-        raise ValueError("The identifier for the request model must be a string containing only letters.")
+    def __str__(self):
+        """Return a string representation of the object."""
+        return f"WPWeatherRequestWithoutPeriod(Number of locations: {len(self.locations)}), Factors: {self.factors}"
 
-    field_dictionary = {
-        "locations": (
-            list[WPGeoLocation],
-            Field(title="Locations", description="The locations for which the weather data is requested."),
-        ),
-        "period": (
-            WPTimePeriod,
-            Field(title="Period", description="The period for which the weather data is requested."),
-        ),
-        "factors": (
-            list[str] | None,
-            Field(title="Factors", description="The factors for which the weather data is requested."),
-        ),
-    }
 
-    if not can_request_periods:
-        field_dictionary.pop("period")
+class WPWeatherRequestWithPeriod(WPWeatherRequestWithoutPeriod, BaseModel):
+    """A class for a weather request with a period."""
 
-    return create_model(__model_name=f"{identifier_for_request_model}Request", **field_dictionary)
+    period: WPTimePeriod = Field(title="Period", description="The period for which the weather data is requested.")
+
+    # Pydantic model configuration
+    model_config = ConfigDict(arbitrary_types_allowed=True, frozen=True, extra="forbid")
+
+    def __str__(self):
+        """Return a string representation of the object."""
+        return (
+            f"WPWeatherRequestWithoutPeriod(Number of locations: {len(self.locations)}), "
+            f"Period: from {self.period.start} to {self.period.end}, Factors: {self.factors}"
+        )
