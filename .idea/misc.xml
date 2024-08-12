@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Black">
+    <option name="enabledOnReformat" value="true" />
+    <option name="enabledOnSave" value="true" />
+    <option name="executionMode" value="BINARY" />
+    <option name="pathToExecutable" value="E:\Tools\black_windows.exe" />
+    <option name="sdkName" value="Poetry (weather-provider-libraries)" />
+  </component>
+  <component name="DiscordProjectSettings">
+    <option name="show" value="ASK" />
+    <option name="description" value="" />
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11.7 WSL (Ubuntu-22.04): (/home/linnr02/.cache/pypoetry/virtualenvs/weather-provider-libraries-iXZvJaml-py3.11/bin/python)" project-jdk-type="Python SDK" />
+  <component name="PythonCompatibilityInspectionAdvertiser">
+    <option name="version" value="3" />
+  </component>
+</project>

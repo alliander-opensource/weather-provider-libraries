@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="WPL - ECCODES  Factor List">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="WPL - ECCODES  Factor List" />
+              <option name="relativePathToSchema" value="src/weather_provider_libraries/harmonization/eccodes_factor_list.schema.json" />
+              <option name="schemaVersion" value="JSON Schema version 7" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="wpl_config/meteo_factors.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="WPL - ModelFactor List">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="WPL - ModelFactor List" />
+              <option name="relativePathToSchema" value="src/weather_provider_libraries/harmonization/model_factor_list.schema.json" />
+              <option name="schemaVersion" value="JSON Schema version 7" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="dummy_source/models/dummy/factors.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>

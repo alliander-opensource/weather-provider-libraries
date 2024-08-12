@@ -1,0 +1,15 @@
+
+Jjavascript:S3504")Unexpected var, use let or const instead.(¸ÌØ¨øÿÿÿÿ
+}javascript:S2392"\Consider moving declaration of 'Scorer' as it is referenced outside current binding context.(¸ÌØ¨øÿÿÿÿ
+|javascript:S65823"[Prefer using an optional chain expression instead, as it's more concise and easier to read.(Æ–İÚûÿÿÿÿ
+Hjavascript:S21893"''element' is not modified in this loop.(Æ–İÚûÿÿÿÿ
+Ujavascript:S1481C":Remove the declaration of the unused '_filename' variable.(Ë£ØH
+Hjavascript:S6594K"'Use the "RegExp.exec()" method instead.(‡›İºüÿÿÿÿ
+Fjavascript:S3504–")Unexpected var, use let or const instead.(¯ÃËĞ
+}javascript:S2392–"`Consider moving declaration of 'splitQuery' as it is referenced outside current binding context.(¯ÃËĞ
+vjavascript:S3776õ"TRefactor this function to reduce its Cognitive Complexity from 28 to the 15 allowed.(òÕùÛøÿÿÿÿ
+;javascript:S125›"Remove this commented out code.(µÜ
+yjavascript:S4043ã"\Move this array "reverse" operation to a separate statement or replace it with "toReversed".(Şãş
+Cjavascript:S6594Ö"'Use the "RegExp.exec()" method instead.(Ëå—|
+Ijavascript:S6594Ú"'Use the "RegExp.exec()" method instead.(‡üœÙúÿÿÿÿ
+yjavascript:S1874¸"WThe signature '(from: number, length?: number): string' of 'text.substr' is deprecated.(ŠÀÍ¯øÿÿÿÿ
