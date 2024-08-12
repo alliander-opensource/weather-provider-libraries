@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 
 #  -------------------------------------------------------
-#  SPDX-FileCopyrightText: 2019-{2024}} Alliander N.V.
+#  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
 from pydantic import ConfigDict, Field
 from pydantic.main import BaseModel
-
-from weather_provider_libraries.utility_classes.location import WPGeoLocation
-from weather_provider_libraries.utility_classes.period import WPTimePeriod
+from weather_provider_libraries.utility.classes.location import WPGeoLocation
+from weather_provider_libraries.utility.classes.period import WPTimePeriod
 
 
 class WPWeatherRequestWithoutPeriod(BaseModel):

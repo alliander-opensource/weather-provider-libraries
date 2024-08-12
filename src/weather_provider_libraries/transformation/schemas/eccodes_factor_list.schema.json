@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "description": "A representation of ECCODES model factor codes, including unit system transformation information",
+  "type": "object",
+  "patternProperties": {
+    "^[0-9]+$":{
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the factor code"
+        },
+        "shortName": {
+          "type": "string",
+          "description": "The short name of the factor code"
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the factor code"
+        },
+        "originalUnit": {
+          "type": "string",
+          "description": "The original and harmonized unit string of the factor code"
+        },
+        "humanUnit": {
+          "type": "string",
+          "description": "The human-readable unit string of the factor code"
+        },
+        "SIUnit": {
+          "type": "string",
+          "description": "The SI unit string of the factor code"
+        },
+        "metricUnit": {
+          "type": "string",
+          "description": "The metric unit string of the factor code"
+        },
+        "imperialUnit": {
+          "type": "string",
+          "description": "The imperial unit string of the factor code"
+        },
+        "americanUnit": {
+          "type": "string",
+          "description": "The American unit string of the factor code"
+        },
+        "oldHarmonisationName": {
+          "type": "string",
+          "description": "The old harmonisation name of the factor code, used for backward compatibility"
+        }
+      },
+      "required": [
+          "name",
+          "shortName",
+          "originalUnit",
+          "humanUnit",
+          "SIUnit",
+          "metricUnit",
+          "imperialUnit",
+          "americanUnit",
+          "oldHarmonisationName"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

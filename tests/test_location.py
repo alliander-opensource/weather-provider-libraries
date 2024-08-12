@@ -7,7 +7,7 @@
 
 import pytest
 from pyproj import CRS
-from weather_provider_libraries.utility_classes.location import WPGeoLocation
+from weather_provider_libraries.utility.classes.location import WPGeoLocation
 
 
 @pytest.mark.parametrize(

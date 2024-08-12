@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 #  -------------------------------------------------------
-#  SPDX-FileCopyrightText: 2019-{2024}} Alliander N.V.
+#  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
@@ -9,8 +9,7 @@
 from pydantic import BaseModel, ConfigDict, Field
 from pyproj import CRS, Geod
 from pyproj.aoi import BBox
-
-from weather_provider_libraries.utils.coordinate_utils import (
+from weather_provider_libraries.utility.coordinate_utils import (
     convert_box_from_crs_to_crs,
     convert_coordinate_to_crs,
     get_x_y_order_northing_easting_as_string,

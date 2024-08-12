@@ -1,22 +1,31 @@
 #!/usr/bin/env python
 
 #  -------------------------------------------------------
-#  SPDX-FileCopyrightText: 2019-{2024}} Alliander N.V.
+#  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
-from weather_provider_libraries.base_classes.model_related.model_information import (
+import xarray as xr
+from weather_provider_libraries.classification.dataclasses.model_information import (
     ModelConfiguration,
     ModelInformation,
     ModelRestrictions,
 )
-from weather_provider_libraries.base_classes.request import WPWeatherRequestWithoutPeriod, WPWeatherRequestWithPeriod
+from weather_provider_libraries.classification.request import WPWeatherRequestWithoutPeriod, WPWeatherRequestWithPeriod
 
 
-class WPLModel:
+class WeatherAccessModel:
+    """The Weather Access Model class.
+
+    This class forms a unifying interface for all installed Weather Access Suite models.
+    """
 
     def __init__(
-        self, information: ModelInformation, restrictions: ModelRestrictions, configuration: ModelConfiguration
+        self,
+        model_source_id: str,
+        information: ModelInformation,
+        restrictions: ModelRestrictions,
+        configuration: ModelConfiguration,
     ):
         """Initialize the model with the given information, restrictions, and configuration."""
         if not isinstance(information, ModelInformation):
@@ -26,6 +35,7 @@ class WPLModel:
         if not isinstance(configuration, ModelConfiguration):
             raise TypeError("The configuration should be an instance of ModelConfiguration.")
 
+        self.source_id = model_source_id
         self.information = information
         self.restrictions = restrictions
         self.configuration = configuration
@@ -56,16 +66,31 @@ class WPLModel:
 
     def get_weather_data(self, weather_request: WPWeatherRequestWithoutPeriod | WPWeatherRequestWithPeriod):
         """Get the weather data for the given request."""
-        # TODO:
-        #   1. Validate the request type with the model configuration
-        #   2. Retrieve the weather data for the given request
-        #   3. Parse the weather data
-        #   4. Return the parsed weather data
+        self._validate_request(weather_request)
 
-    def _retrieve_weather_data(self, weather_request: WPWeatherRequestWithoutPeriod | WPWeatherRequestWithPeriod):
+        weather_data_ds = self._retrieve_weather_data(weather_request)
+        parsed_weather_data_ds = self._parse_weather_data(weather_data_ds)
+
+        self._validate_returned_data(parsed_weather_data_ds)
+
+        return parsed_weather_data_ds
+
+    def _validate_request(self, weather_request: WPWeatherRequestWithoutPeriod | WPWeatherRequestWithPeriod):
+        """Validate the request type with the model configuration."""
+        # TODO: Implement the validation logic
+        raise NotImplementedError("Not implemented yet.")
+
+    def _retrieve_weather_data(
+        self, weather_request: WPWeatherRequestWithoutPeriod | WPWeatherRequestWithPeriod
+    ) -> xr.Dataset:
         """Retrieve the weather data for the given request."""
         raise NotImplementedError("This method should be implemented in the child class.")
 
-    def _parse_weather_data(self, weather_data: dict):
+    def _parse_weather_data(self, weather_data: xr.Dataset) -> xr.Dataset:
         """Parse the weather data."""
         raise NotImplementedError("This method should be implemented in the child class.")
+
+    def _validate_returned_data(self, weather_data: xr.Dataset):
+        """Validate the returned weather data for proper formatting."""
+        # TODO: Implement the validation logic
+        raise NotImplementedError("Not implemented yet.")

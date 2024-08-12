@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 #  -------------------------------------------------------
-#  SPDX-FileCopyrightText: 2019-{2024}} Alliander N.V.
+#  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 #  -------------------------------------------------------
 
@@ -9,9 +9,8 @@ from ipaddress import IPv4Address, IPv6Address
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl
 from pyproj.aoi import BBox
-
-from weather_provider_libraries.base_classes.storage_components.storage_information import WPDataStorageMode
-from weather_provider_libraries.utility_classes.period import WPTimePeriod
+from weather_provider_libraries.__old__locations.base_classes import WPDataStorageMode
+from weather_provider_libraries.utility.classes.period import WPTimePeriod
 
 
 class ModelInformation(BaseModel):
