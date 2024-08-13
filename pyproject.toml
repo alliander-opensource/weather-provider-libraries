@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "weather-provider-libraries"
+version = "0.3.1"
+description = "The Weather Provider Libraries for the Weather Provider Access Suite project"
+authors = ["Raoul Linnenbank <58594297+rflinnenbank@users.noreply.github.com>"]
+license = "MPL2.0"
+readme = "README.rst"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+sphinx = "^8.0.2"
+pytest = "^8.3.2"
+coverage = "^7.6.1"
+mypy = "^1.11.1"
+ruff = "^0.5.7"
+black = "^24.8.0"
+jupyter = "^1.0.0"
+pre-commit = "^3.8.0"
+myst-parser = "^4.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

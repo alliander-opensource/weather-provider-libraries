@@ -8,6 +8,8 @@
         <option value="DIRECTORY:.github" />
         <option value="DIRECTORY:.idea" />
         <option value="DIRECTORY:.obsidian" />
+        <option value="FILE:sphinx-docs/_static/wpas_logo.svg" />
+        <option value="GLOB:**/*.svg" />
       </list>
     </option>
     <option name="projectKey" value="alliander-opensource_weather-provider-libraries" />
