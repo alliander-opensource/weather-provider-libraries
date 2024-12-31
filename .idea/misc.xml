@@ -11,7 +11,7 @@
     <option name="show" value="ASK" />
     <option name="description" value="" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11.7 WSL (Ubuntu-22.04): (/home/linnr02/.cache/pypoetry/virtualenvs/weather-provider-libraries-iXZvJaml-py3.11/bin/python)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Weather Provider Libraries (Python3.12)" project-jdk-type="Python SDK" />
   <component name="PythonCompatibilityInspectionAdvertiser">
     <option name="version" value="3" />
   </component>

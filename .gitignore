@@ -665,3 +665,4 @@ src/weather_provider_sources/
 
 # All of IDEA really
 .idea/
+!/htmlcov/
