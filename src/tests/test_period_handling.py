@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 
-#  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
+#  SPDX-FileCopyrightText: 2019-2025 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 
 from datetime import datetime, timedelta, timezone
 
 import numpy as np
 import pytest
-from weather_provider_libraries.__OLD__.base.interfaces.interactions import translate_datetime_to_np_datetime64
 
 
 def test_invalid_type_when_translating_datetime_to_np_datetime64():

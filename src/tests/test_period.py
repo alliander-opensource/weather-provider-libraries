@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
-#  SPDX-FileCopyrightText: 2019-2024 Alliander N.V.
+#  SPDX-FileCopyrightText: 2019-2025 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 
 from datetime import datetime
 
 import numpy as np
-from weather_provider_libraries.__OLD__.base.interfaces.period import WPTimePeriod
+from weather_provider_libraries.BACKUP.__OLD__.base.interfaces.period import WPTimePeriod
 
 
 def test_wp_time_period_initialization_with_np_datetime64():

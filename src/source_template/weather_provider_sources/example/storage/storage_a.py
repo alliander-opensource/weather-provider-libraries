@@ -3,7 +3,7 @@
 #  SPDX-FileCopyrightText: 2019-2025 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
 
-from weather_provider_libraries.base_classes.meteo_storage import MeteoStorage
+from weather_provider_libraries.BACKUP.base_classes.meteo_storage import MeteoStorage
 
 
 class StorageA(MeteoStorage):

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Black">
-    <option name="enabledOnReformat" value="true" />
-    <option name="enabledOnSave" value="true" />
     <option name="executionMode" value="BINARY" />
     <option name="pathToExecutable" value="E:\Tools\black_windows.exe" />
-    <option name="sdkName" value="Poetry (weather-provider-libraries)" />
+    <option name="sdkName" value="Weather Provider Libraries (Python3.12)" />
   </component>
   <component name="DiscordProjectSettings">
     <option name="show" value="ASK" />
