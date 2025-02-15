@@ -1,0 +1,21 @@
+---
+title: WPAS Core Class Structure
+---
+classDiagram
+    class Controller {
+        + String version
+        + String project_name
+        + List<Source> sources
+    }
+    class Source {
+        + String name
+        + String type
+        + String description
+    }
+    class Model {
+        + String name
+        + String type
+        + String description
+    }
+    Controller "1" *-- "1..*" Source
+    Source "1" *-- "1..*" Model

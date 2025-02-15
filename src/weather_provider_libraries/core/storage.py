@@ -21,9 +21,9 @@ class StorageSettings(BaseModel):
     """..."""
 
     storage_type: StorageType = Field(StorageType.NO_STORAGE, description="The storage type for the model.")
-    max_cache_size_in_mb: int = Field(500, description="The maximum cache size in MB.")
-    max_cache_time_in_minutes: int = Field(24 * 60, description="The maximum cache time in minutes.")
-    max_repository_size_in_gb: int = Field(100, description="The maximum repository size in GB.")
+    max_cache_size_in_mb: int | None = Field(500, description="The maximum cache size in MB.")
+    max_cache_time_in_minutes: int | None = Field(24 * 60, description="The maximum cache time in minutes.")
+    max_repository_size_in_gb: int | None = Field(100, description="The maximum repository size in GB.")
 
 
 class Storage:

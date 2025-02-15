@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
+
 #  SPDX-FileCopyrightText: 2019-2025 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
+
 
 import xarray as xr
 
@@ -65,7 +67,9 @@ class Controller:
 
         return source.format_weather(weather_data, target_format)
 
-    def get_source(self, source_id: str) -> Source:
+    def get_source(self, source_id: str) -> Source | None:
+        if not self._sources or source_id not in self.sources:
+            return None
         return self.sources[source_id]
 
     @property
@@ -78,7 +82,11 @@ class Controller:
         }
 
     @property
-    def sources(self) -> dict:
+    def sources(self) -> dict[str, Source] | None:
         """Return the Sources metadata."""
+        if len(self._sources) == 0:
+            return None
+        source_metadata = {}
         for source in self._sources:
-            yield self._sources[source].metadata
+            source_metadata[source] = self._sources[source].metadata
+        return source_metadata

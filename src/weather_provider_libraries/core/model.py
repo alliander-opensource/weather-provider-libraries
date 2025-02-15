@@ -33,7 +33,7 @@ class Model:
         self._model_data: ModelData = model_data
         self._model_factors: dict[str, ModelFactor] = {factor.factor_id: factor for factor in model_factors}
         self.storage_settings: StorageSettings = self._load_storage_settings() or StorageSettings(
-            storage_type=StorageType.NO_STORAGE,
+            storage_type=StorageType.NO_STORAGE
         )
 
         # Run a self validation to check if everything is correctly loaded

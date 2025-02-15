@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
+
 #  SPDX-FileCopyrightText: 2019-2025 Alliander N.V.
 #  SPDX-License-Identifier: MPL-2.0
+
+import importlib
 
 import xarray as xr
 
@@ -9,6 +12,9 @@ from weather_provider_libraries.core.format import Format
 from weather_provider_libraries.core.model import Model
 from weather_provider_libraries.core.request import Request
 from weather_provider_libraries.core.storage import Storage
+
+#  SPDX-FileCopyrightText: 2019-2025 Alliander N.V.
+#  SPDX-License-Identifier: MPL-2.0
 
 
 class Source:
@@ -21,12 +27,30 @@ class Source:
     def __init__(self):
         """Initialize the source."""
         # Initialize the models
-        self._models: dict[str, Model] = ...
+        self._models: dict[str, Model] = self._load_models()
 
         # Initialize the storage settings
         self._storage_settings: dict[str, Storage] = ...
 
         # Run a self validation to check if everything is correctly loaded
+        ...
+
+    def _load_models(self) -> dict[str, Model]:
+        """Load the models from the source."""
+        # Establish the package name and set up a models dictionary for the models
+        model_package_name = self.__get_current_package_name() + ".models"
+
+        # Evaluate the package
+        self.__evaluate_package(model_package_name)
+
+        # Load the models
+        models: dict[str, Model] = self.__load_models_from_package(model_package_name)
+
+        # Return the models
+        return models
+
+    def _load_storage_settings(self) -> dict[str, Storage]:
+        """Load the storage settings from the source."""
         ...
 
     def get_model(self, model_id: str) -> Model:
@@ -77,3 +101,33 @@ class Source:
     def models(self) -> list[str]:
         """Return the models of the source."""
         return list(self._models.keys())
+
+    @staticmethod
+    def __get_current_package_name() -> str:
+        if __package__:
+            return __package__
+
+        # Fallback to the module name
+        module_parts = __name__.split(".")
+        if len(module_parts) <= 1:
+            raise ValueError("Could not determine package name.")
+        return ".".join(module_parts[:-1])
+
+    @staticmethod
+    def __evaluate_package(package_name: str):
+        # Evaluate the package by importing it
+        try:
+            importlib.import_module(package_name)
+        except ModuleNotFoundError as module_not_found_error:
+            raise ValueError(f"Could not find package {package_name}.") from module_not_found_error
+
+        # Check if the package is correctly loaded and each model within it has the correct structure
+        ...
+
+    def __load_models_from_package(self, package_name: str) -> dict[str, Model]:
+        """Load the models from a package."""
+        # Load the models from the package
+        models: dict[str, Model] = ...
+
+        # Return the models
+        return models

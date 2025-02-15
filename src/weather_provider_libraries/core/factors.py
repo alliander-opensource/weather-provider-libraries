@@ -7,7 +7,15 @@ from pydantic import BaseModel, ConfigDict
 
 
 class ModelFactor(BaseModel):
-    """This class is the class used for any request made to the WPAS libraries project."""
+    """A dataclass aimed at providing an interface for external meteorological factors before harmonisation.
+
+    The goal of this class is to provide a common interface for external meteorological factors before harmonisation
+    that will allow for a standardized interface between the WPAS libraries and the external data providers. This will
+    allow for the WPAS libraries to be able to handle data from multiple sources in a consistent manner.
+
+    Its counterpart, the EccodesFactor dataclass (linked via the eccodes_id), stores information on how to format any
+    Modelfactor that is a direct or indirect equivalent of an ECCODES factor as such.
+    """
 
     # Model Configuration
     model_config = ConfigDict()
@@ -20,7 +28,14 @@ class ModelFactor(BaseModel):
 
 
 class EccodesFactor(BaseModel):
-    """This class is the class used for any request made to the WPAS libraries project."""
+    """A dataclass aimed at providing an interface for ECCODES compatible meteorological factors.
+
+    Where the ModelFactor dataclass is aimed at providing an interface for external meteorological factors before
+    harmonisation, the EccodesFactor dataclass is aimed at providing an interface for ECCODES compatible meteorological
+    factors that allows Modelfactors to convert to harmonised ECCODES factors and to format those into any compatible
+    unit system. This will allow for a standardized interface between the WPAS libraries and the ECCODES library. This
+    will allow for the WPAS libraries to be able to handle data from multiple sources in a consistent manner.
+    """
 
     # Model Configuration
     model_config = ConfigDict()
