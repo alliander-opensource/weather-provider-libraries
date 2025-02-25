@@ -1,5 +1,7 @@
 # File structure
 
+## TODO: Update the file structure to match the current project structure
+
 <!-- prettier-ignore-start -->
 <!-- Don't forget the two tabs! -->
 

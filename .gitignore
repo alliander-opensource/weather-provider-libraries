@@ -342,7 +342,7 @@ paket-files/
 __pycache__/
 *.pyc
 
-# Cake - Uncomment if you are using it
+# Cake - Uncomment if you are tutorials it
 # tools/**
 # !tools/packages.config
 
@@ -612,8 +612,8 @@ cython_debug/
 .idea/**/libraries
 
 # Gradle and Maven with auto-import
-# When using Gradle or Maven with auto-import, you should exclude module files,
-# since they will be recreated, and may cause churn.  Uncomment if using
+# When tutorials Gradle or Maven with auto-import, you should exclude module files,
+# since they will be recreated, and may cause churn.  Uncomment if tutorials
 # auto-import.
 # .idea/artifacts
 # .idea/compiler.xml
