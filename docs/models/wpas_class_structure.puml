@@ -1,0 +1,52 @@
+@startuml
+'https://plantuml.com/class-diagram
+!theme sunlust
+
+package "weather_provider_libraries.core" {
+    class Controller {
+        +version : str
+        +project_name : str
+        +sources : list[str]
+    }
+
+    abstract class Source {
+        ...
+    }
+
+    abstract class Model {
+        ...
+    }
+
+    abstract class Storage {
+        ...
+    }
+
+    Controller --> Source
+
+    Source --> Model
+
+    Model --> Storage
+}
+
+package "weather_provider_sources.example" {
+    class ExampleSource {
+        ...
+    }
+
+    class ExampleModel {
+        ...
+    }
+
+    class ExampleStorage {
+        ...
+    }
+
+    Source <|-- ExampleSource
+
+    Model <|-- ExampleModel
+
+    Storage <|-- ExampleStorage
+
+}
+
+@enduml

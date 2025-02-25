@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+!theme sunlust
+
+:Model User: as mu
+
+package ControllerClass as cc {
+    (Self Validation) as sv
+    (Use Source) as us
+    (Provide information) as pi
+}
+
+mu -down-> cc
+
+cc -down-> sv
+cc -down-> us
+cc -down-> pi
+
+@enduml

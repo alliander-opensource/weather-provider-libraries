@@ -1,0 +1,46 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+!theme sunlust
+
+:Model User: as mu
+:SourceClass: as sc
+:ControllerClass: as cc
+
+package ModelClass as mc {
+    (Retrieve Weather Data) as rw
+    (Transform Weather Data) as tw
+    (Store Weather Data) as sw
+    (Self Validation) as sv
+    (Provide information) as pi
+}
+
+mu -down-> mc
+mu -right-> sc
+mu -right-> cc
+
+sc -down-> mc
+cc -down-> sc
+
+mc -down-> sw
+mc -down-> tw
+mc -down-> rw
+mc -down-> sv
+
+note left of mu
+    The user can interact with either the model directly or indirectly via the source or controller.
+end note
+
+note bottom of sw
+    Store data in the storage system using cache or archive modes.
+end note
+
+note bottom of tw
+    Transform the data via factor transformation (harmonization) and file formatting.
+end note
+
+note bottom of rw
+    Can be retrieved from either the external source or the storage.
+    Should be retrievable for both request mode and full dataset retrieval mode.
+end note
+
+@enduml

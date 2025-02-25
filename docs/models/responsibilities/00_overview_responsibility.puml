@@ -1,0 +1,47 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+!theme sunlust
+
+:Model User: as mu
+
+package ControllerClass as cc {
+    (Self Validation) as csv
+    (Use Source) as us
+    (Provide information) as cpi
+}
+
+package SourceClass as sc {
+    (Self Validation) as ssv
+    (Use Model) as um
+    (Provide information) as spi
+}
+
+package ModelClass as mc {
+    (Retrieve Weather Data) as rw
+    (Transform Weather Data) as tw
+    (Store Weather Data) as sw
+    (Self Validation) as msv
+    (Provide information) as mpi
+}
+
+mu -down-> cc
+
+cc -down-> csv
+cc -down-> us
+cc -down-> cpi
+
+us -down-> sc
+
+sc -down-> ssv
+sc -down-> um
+sc -down-> spi
+
+um -down-> mc
+
+mc -down-> sw
+mc -down-> tw
+mc -down-> rw
+mc -down-> msv
+mc -down-> mpi
+
+@enduml

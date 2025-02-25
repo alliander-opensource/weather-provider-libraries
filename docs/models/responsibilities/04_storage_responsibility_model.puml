@@ -1,0 +1,12 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+!theme sunlust
+
+package StorageClass as sr {
+    (Store Data) as sd
+    (Retrieve Data) as rd
+    (Update Data) as ud
+    (Delete Data) as dd
+}
+
+@enduml

@@ -1,0 +1,105 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+package "weather_provider_libraries.core" {
+    class Controller
+    abstract class Source
+    abstract class Model
+
+
+    class Controller{
+        +version: str
+        +project_name: str
+        +sources: list[Source]
+        +get_event(source_name: str, model_name: str): xarray.Dataset
+        +format_event(source_name: str, model_name: str, event: xarray.Dataset, target_format: Format): xarray.Dataset
+        +get_source(source_name): Source
+        {field} +metadata(): dict
+    }
+
+    class Source{
+        +id: str
+        +models: list[Model]
+        +get_event(model_name: str): xarray.Dataset
+        +format_event(model_name: str, event: xarray.Dataset, target_format: Format): xarray.Dataset
+        -_load_models(): None
+        -_validate_models(): None
+        {field} +metadata(): dict
+        {field} +is_valid(): bool
+    }
+
+    class Model{
+        +id: str
+        +storage: Storage
+        +get_event(): xarray.Dataset
+        +format_event(event: xarray.Dataset, target_format: Format): xarray.Dataset
+        {field} +metadata(): dict
+        {field} +is_valid(): bool
+    }
+
+    class Storage{
+        +id: str
+        +get_event(): xarray.Dataset
+        +format_event(event: xarray.Dataset, target_format: Format): xarray.Dataset
+        {field} +metadata(): dict
+        {field} +is_valid(): bool
+    }
+
+    Controller --> Source
+
+    Source --> Model
+
+    Model --> Storage
+}
+
+
+package "weather_provider_sources.example" {
+    class ExampleSource{
+        +id: "example""
+        +models: list["example_model_1", "example_model_2"]
+        +get_event(model_name: str): xarray.Dataset
+        +metadata(): dict
+    }
+
+    class ExampleModel{
+        +id: "example_model_1"
+        +get_event(): xarray.Dataset
+        +metadata(): dict
+    }
+
+    class ExampleStorage{
+        +id: "example_storage"
+        +get_event(): xarray.Dataset
+        +metadata(): dict
+    }
+
+    Source <|-- ExampleSource
+    Model <|-- ExampleModel
+
+}
+
+'abstract class AbstractList
+'abstract AbstractCollection
+'interface List
+'interface Collection
+'
+'List <|-- AbstractList
+'Collection <|-- AbstractCollection
+'
+'Collection <|- List
+'AbstractCollection <|- AbstractList
+'AbstractList <|-- ArrayList
+'
+'class ArrayList {
+'Object[] elementData
+'size()
+'}
+'
+'enum TimeUnit {
+'DAYS
+'HOURS
+'MINUTES
+'}
+
+@enduml
