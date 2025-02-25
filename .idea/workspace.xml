@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b8c8959d-15cb-47f1-b23b-640e4588cf22" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/source_template/weather_provider_sources/example_source/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/source_template/weather_provider_sources/example_source/models/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/source_template/weather_provider_sources/example_source/models/model_a.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/source_template/weather_provider_sources/example_source/models/model_b.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/source_template/weather_provider_sources/example_source/source.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/source_template/weather_provider_sources/example_source/utilities/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/base/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/base/actions/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/base/actions/factor_transformations.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/base/actions/meteo_requests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/base/controllers/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/base/controllers/source_model_handler.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/base/controllers/storage_manager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/base/model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/base/source.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/base/storage.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/base/utility/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/base/utility/coordinate.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/base/utility/period.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/schemas/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/schemas/eccodes_weatherfactor_list.schema.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/schemas/eccodes_weatherfactor_list.schema.json.license" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/utilities/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/utilities/coordinate_handling.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weather_provider_libraries/utilities/period_handling.py" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="feature/skeleton" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;rflinnenbank&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/alliander-opensource/weather-provider-libraries.git&quot;,
+    &quot;accountId&quot;: &quot;b7a720ec-0fd0-430b-aeec-59600ef6d422&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2t7dtWtYGgKdsX23H9FIIikfm3R" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-PY-243.24978.54" />
+        <option value="bundled-python-sdk-91e3b7efe1d4-466328ff949b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.24978.54" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b8c8959d-15cb-47f1-b23b-640e4588cf22" name="Changes" comment="" />
+      <created>1739707261694</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1739707261694</updated>
+      <workItem from="1739707262929" duration="1413000" />
+      <workItem from="1740477777426" duration="923000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
